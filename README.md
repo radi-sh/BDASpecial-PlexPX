@@ -1,3 +1,3 @@
 # BDASpecial-PlexPX
-##–}“ºèt‚Ì–ì–] `Plex‘n¢`
+##å‡¡éŠ…é‘¼ã®é‡Žæœ› ï½žPlexå‰µä¸–ï½ž
 
