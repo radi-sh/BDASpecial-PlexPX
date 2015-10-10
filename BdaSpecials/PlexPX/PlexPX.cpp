@@ -59,6 +59,11 @@ static const wstring KNOWN_TUNER_GUIDS_T[] = {
 	L"{6430d7ee-7dc7-4978-9481-d9657cbd583f}",	// PX-W3U3 V2 Tuner 3
 };
 
+static const wstring KNOWN_TUNER_GUIDS_3[] = {
+	L"{58d97867-8a41-4f07-97e3-f2819af81a92}",	// PX-S3U Tuner 0
+	L"{cd93ac8b-8e1f-4a3e-98fc-b89c44817ee1}",	// PX-S3U Tuner 1 (is it a joke?)
+};
+
 HMODULE hMySelf;
 
 static inline HRESULT plex_get_flags(IKsPropertySet *pIKsPropertySet, DWORD *pdwFlag)
@@ -191,12 +196,12 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 
 	// DisplayName‚ªGUIDˆê——‚Æˆê’v‚µ‚Ä‚¢‚é‚©”äŠr
 	if (bUseKnownGUID) {
-		if (bISDBT == bISDBS) {
-			OutputDebug(L"Set one of ISDB-S or ISDB-T.\n");
+		if (!bISDBT && !bISDBS) {
+			OutputDebug(L"Set ISDB-S or/and ISDB-T.\n");
 			return E_FAIL;
 		}
 
-		if (bISDBS) {
+		else if (bISDBS && !bISDBT) {
 			BOOL found = FALSE;
 			for (int i = 0; i < sizeof KNOWN_TUNER_GUIDS_S / sizeof KNOWN_TUNER_GUIDS_S[0]; i++) {
 				if (displayName.find(KNOWN_TUNER_GUIDS_S[i]) != wstring::npos) {
@@ -211,10 +216,25 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 			}
 		}
 
-		if (bISDBT) {
+		else if (bISDBT && !bISDBS) {
 			BOOL found = FALSE;
 			for (int i = 0; i < sizeof KNOWN_TUNER_GUIDS_T / sizeof KNOWN_TUNER_GUIDS_T[0]; i++) {
 				if (displayName.find(KNOWN_TUNER_GUIDS_T[i]) != wstring::npos) {
+					// Œ©‚Â‚©‚Á‚½
+					found = TRUE;
+					break;
+				}
+			}
+			if (!found) {
+				OutputDebug(L"Tuner GUID not match.\n");
+				return E_FAIL;
+			}
+		}
+
+		else {
+			BOOL found = FALSE;
+			for (int i = 0; i < sizeof KNOWN_TUNER_GUIDS_3 / sizeof KNOWN_TUNER_GUIDS_3[0]; i++) {
+				if (displayName.find(KNOWN_TUNER_GUIDS_3[i]) != wstring::npos) {
 					// Œ©‚Â‚©‚Á‚½
 					found = TRUE;
 					break;
