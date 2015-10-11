@@ -27,41 +27,46 @@ using namespace std;
 
 static const GUID CLSID_PropSet = { 0x9E1781E1,0x9CB1,0x4407,{ 0xBB,0xCE,0x54,0x26,0xC8,0xD0,0x0A,0x4B } };
 
-static const wstring KNOWN_TUNER_GUIDS_S[] = {
-	L"{8c16b9c1-b2ec-4657-b69f-f1925fcfc174}",	// PX-Q3PE Tuner 0 / PX-W3PE Tuner 0
-	L"{ead4691e-4ed3-4491-b193-8abdc2895010}",	// PX-Q3PE Tuner 1 / PX-W3PE Tuner 1
-	L"{8181256c-91d3-440a-87a7-74e193e12ca6}",	// PX-Q3PE Tuner 4
-	L"{7d80835e-8f9c-4928-bcab-f0262cbb6bda}",	// PX-Q3PE Tuner 5
-	L"{06cd74f9-2ec3-47de-b7c0-fbd1f87bb172}",	// PX-W3PE V2 Tuner 0
-	L"{a12cea30-b753-44e8-a027-9dc868d68888}",	// PX-W3PE V2 Tuner 1
-	L"{955b2355-62fc-42bd-a0bb-e75e9451b15d}",	// PX-W3PE V2 Tuner 4
-	L"{8b3af864-b968-4b56-a4df-bd518b161dd9}",	// PX-W3PE V2 Tuner 5
-	L"{64936de7-6ab9-470a-b0e6-10014f83b75f}",	// PX-S3U2 Tuner 0
-	L"{f08b8084-075c-4542-9405-c53c16c981ac}",	// PX-W3U2 Tuner 0
-	L"{37a61614-c9cd-446f-8214-430b59d769fb}",	// PX-W3U3 Tuner 0
-	L"{fc7eee4c-58ab-47bd-a511-1149f49007ea}",	// PX-W3U3 V2 Tuner 0
-	L"{ef4af615-7acd-45d2-b7b4-ded5c22a382e}",	// PX-W3U3 V2 Tuner 2
+struct TunerAndCaptureGuid {
+	const wstring Tuner;
+	const wstring Capture;
 };
 
-static const wstring KNOWN_TUNER_GUIDS_T[] = {
-	L"{b332d1a0-ce5e-4ccd-bbaa-5d27da1937f7}",	// PX-Q3PE Tuner 2 / PX-W3PE Tuner 2
-	L"{1bb610b9-a113-43ef-8707-0d0eb2786d0c}",	// PX-Q3PE Tuner 3 / PX-W3PE Tuner 3
-	L"{f7dffb42-19bb-495c-8025-cae755351ddb}",	// PX-Q3PE Tuner 6
-	L"{4f47ce49-ca06-4482-8fda-aa130873f9fb}",	// PX-Q3PE Tuner 7
-	L"{67a09e55-6937-4197-9854-aebabb867cf0}",	// PX-W3PE V2 Tuner 2
-	L"{e9de5b70-97bd-46cf-b3b2-ab7e7d5553af}",	// PX-W3PE V2 Tuner 3
-	L"{2ef1f363-01f6-4d40-abf0-bcf60412a91f}",	// PX-W3PE V2 Tuner 6
-	L"{a954451c-bb29-4286-862c-977cc622aaca}",	// PX-W3PE V2 Tuner 7
-	L"{6d693f4b-8575-40c6-9537-4515579d1cd8}",	// PX-S3U2 Tuner 1
-	L"{c2aca3d2-a439-4f7f-b064-75362763edb7}",	// PX-W3U2 Tuner 1
-	L"{2e55751d-b8ad-4f98-8de7-3b06c2d4cfe9}",	// PX-W3U3 Tuner 1
-	L"{92644c53-ca6c-40b3-89e0-91c8c40ad263}",	// PX-W3U3 V2 Tuner 1
-	L"{6430d7ee-7dc7-4978-9481-d9657cbd583f}",	// PX-W3U3 V2 Tuner 3
+static const TunerAndCaptureGuid KNOWN_GUIDS_S[] = {
+	{ L"{8c16b9c1-b2ec-4657-b69f-f1925fcfc174}", L"{49b710c9-9c30-4d27-b664-1a9fa41dc27e}", },	// PX-Q3PE Tuner 0 / PX-W3PE Tuner 0
+	{ L"{ead4691e-4ed3-4491-b193-8abdc2895010}", L"{5fdb68db-1b0a-496f-b47a-7db2f8057d50}", },	// PX-Q3PE Tuner 1 / PX-W3PE Tuner 1
+	{ L"{8181256c-91d3-440a-87a7-74e193e12ca6}", L"{84503d7b-3f36-4271-9a0e-72e13124b22b}", },	// PX-Q3PE Tuner 4
+	{ L"{7d80835e-8f9c-4928-bcab-f0262cbb6bda}", L"{e9e1b74f-04b0-4016-a981-7b21482c9456}", },	// PX-Q3PE Tuner 5
+	{ L"{06cd74f9-2ec3-47de-b7c0-fbd1f87bb172}", L"{e367dc1b-bfb5-4698-a036-f49a19a63c55}", },	// PX-W3PE V2 Tuner 0
+	{ L"{a12cea30-b753-44e8-a027-9dc868d68888}", L"{ed5390ab-ead4-4b54-8928-2e4f070a99c9}", },	// PX-W3PE V2 Tuner 1
+	{ L"{955b2355-62fc-42bd-a0bb-e75e9451b15d}", L"{5b24d815-b61b-4c85-9ed6-dc2f1772e204}", },	// PX-W3PE V2 Tuner 4
+	{ L"{8b3af864-b968-4b56-a4df-bd518b161dd9}", L"{54c44ae2-eec6-4824-8ebc-8555934cea40}", },	// PX-W3PE V2 Tuner 5
+	{ L"{64936de7-6ab9-470a-b0e6-10014f83b75f}", L"{25dcdf37-fb57-4515-8971-ae392196ff27}", },	// PX-S3U2 Tuner 0
+	{ L"{f08b8084-075c-4542-9405-c53c16c981ac}", L"{7a172030-e4c3-4903-91d1-d831701ae6b9}", },	// PX-W3U2 Tuner 0
+	{ L"{37a61614-c9cd-446f-8214-430b59d769fb}", L"{34a320cb-f54b-47cf-ad49-e66a23a20630}", },	// PX-W3U3 Tuner 0
+	{ L"{fc7eee4c-58ab-47bd-a511-1149f49007ea}", L"{5ea23aed-35cb-44d4-8d85-748f36b1ac5b}", },	// PX-W3U3 V2 Tuner 0
+	{ L"{ef4af615-7acd-45d2-b7b4-ded5c22a382e}", L"{d572e115-62c7-49ff-956c-84369aada823}", },	// PX-W3U3 V2 Tuner 2
 };
 
-static const wstring KNOWN_TUNER_GUIDS_3[] = {
-	L"{58d97867-8a41-4f07-97e3-f2819af81a92}",	// PX-S3U Tuner 0
-	L"{cd93ac8b-8e1f-4a3e-98fc-b89c44817ee1}",	// PX-S3U Tuner 1 (is it a joke?)
+static const TunerAndCaptureGuid KNOWN_GUIDS_T[] = {
+	{ L"{b332d1a0-ce5e-4ccd-bbaa-5d27da1937f7}", L"{21915155-d273-4023-9258-258416f48bd9}", },	// PX-Q3PE Tuner 2 / PX-W3PE Tuner 2
+	{ L"{1bb610b9-a113-43ef-8707-0d0eb2786d0c}", L"{d3b05569-c1c2-4f8d-b03c-dd7ba04ebc6a}", },	// PX-Q3PE Tuner 3 / PX-W3PE Tuner 3
+	{ L"{f7dffb42-19bb-495c-8025-cae755351ddb}", L"{fa8b2a09-53d3-42f7-b9c8-6ce79092f3f6}", },	// PX-Q3PE Tuner 6
+	{ L"{4f47ce49-ca06-4482-8fda-aa130873f9fb}", L"{da7b3902-c5f9-4829-a46f-f55922324cd5}", },	// PX-Q3PE Tuner 7
+	{ L"{67a09e55-6937-4197-9854-aebabb867cf0}", L"{041ca304-19fc-4885-93a0-657c2e2c83bf}", },	// PX-W3PE V2 Tuner 2
+	{ L"{e9de5b70-97bd-46cf-b3b2-ab7e7d5553af}", L"{5f2d5729-3d78-4210-8dec-82fd21ad5a4d}", },	// PX-W3PE V2 Tuner 3
+	{ L"{2ef1f363-01f6-4d40-abf0-bcf60412a91f}", L"{52a7dfeb-de46-4b7f-9196-c1a8ec86d7d7}", },	// PX-W3PE V2 Tuner 6
+	{ L"{a954451c-bb29-4286-862c-977cc622aaca}", L"{e1d5479d-ebba-4689-9253-7ee0fa97bca7}", },	// PX-W3PE V2 Tuner 7
+	{ L"{6d693f4b-8575-40c6-9537-4515579d1cd8}", L"{80e65bb1-eed0-4039-bdfc-4c365ce02477}", },	// PX-S3U2 Tuner 1
+	{ L"{c2aca3d2-a439-4f7f-b064-75362763edb7}", L"{eb561c45-dcbc-410a-bca2-98a05309eb53}", },	// PX-W3U2 Tuner 1
+	{ L"{2e55751d-b8ad-4f98-8de7-3b06c2d4cfe9}", L"{71c25d40-b6bd-46a4-8363-329d28e663ab}", },	// PX-W3U3 Tuner 1
+	{ L"{92644c53-ca6c-40b3-89e0-91c8c40ad263}", L"{e2b5be0c-39e8-4d9f-bc14-79ba8805181a}", },	// PX-W3U3 V2 Tuner 1
+	{ L"{6430d7ee-7dc7-4978-9481-d9657cbd583f}", L"{974860c1-a2a9-48e8-82d2-5e8c64a39878}", },	// PX-W3U3 V2 Tuner 3
+};
+
+static const TunerAndCaptureGuid KNOWN_GUIDS_3[] = {
+	{ L"{58d97867-8a41-4f07-97e3-f2819af81a92}", L"{7e65574d-e061-4129-8998-51881804e4a4}", },	// PX-S3U Tuner 0
+	{ L"{cd93ac8b-8e1f-4a3e-98fc-b89c44817ee1}", L"{5e59138b-5322-4f1c-a03c-ce721a11a0a6}", },	// PX-S3U Tuner 1 (is it a joke?)
 };
 
 HMODULE hMySelf;
@@ -203,8 +208,8 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 
 		else if (bISDBS && !bISDBT) {
 			BOOL found = FALSE;
-			for (int i = 0; i < sizeof KNOWN_TUNER_GUIDS_S / sizeof KNOWN_TUNER_GUIDS_S[0]; i++) {
-				if (displayName.find(KNOWN_TUNER_GUIDS_S[i]) != wstring::npos) {
+			for (int i = 0; i < sizeof KNOWN_GUIDS_S / sizeof KNOWN_GUIDS_S[0]; i++) {
+				if (displayName.find(KNOWN_GUIDS_S[i].Tuner) != wstring::npos) {
 					// 見つかった
 					found = TRUE;
 					break;
@@ -218,8 +223,8 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 
 		else if (bISDBT && !bISDBS) {
 			BOOL found = FALSE;
-			for (int i = 0; i < sizeof KNOWN_TUNER_GUIDS_T / sizeof KNOWN_TUNER_GUIDS_T[0]; i++) {
-				if (displayName.find(KNOWN_TUNER_GUIDS_T[i]) != wstring::npos) {
+			for (int i = 0; i < sizeof KNOWN_GUIDS_T / sizeof KNOWN_GUIDS_T[0]; i++) {
+				if (displayName.find(KNOWN_GUIDS_T[i].Tuner) != wstring::npos) {
 					// 見つかった
 					found = TRUE;
 					break;
@@ -233,8 +238,8 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 
 		else {
 			BOOL found = FALSE;
-			for (int i = 0; i < sizeof KNOWN_TUNER_GUIDS_3 / sizeof KNOWN_TUNER_GUIDS_3[0]; i++) {
-				if (displayName.find(KNOWN_TUNER_GUIDS_3[i]) != wstring::npos) {
+			for (int i = 0; i < sizeof KNOWN_GUIDS_3 / sizeof KNOWN_GUIDS_3[0]; i++) {
+				if (displayName.find(KNOWN_GUIDS_3[i].Tuner) != wstring::npos) {
 					// 見つかった
 					found = TRUE;
 					break;
@@ -269,6 +274,47 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 	}
 
 	return S_OK;
+}
+
+__declspec(dllexport) HRESULT CheckCapture(const WCHAR *szTunerDisplayName, const WCHAR *szTunerFriendlyName,
+	const WCHAR *szCaptureDisplayName, const WCHAR *szCaptureFriendlyName, const WCHAR *szIniFilePath)
+{
+	BOOL bUseKnownGUID = ::GetPrivateProfileIntW(L"PLEXPX", L"UseKnownGUID", 0, szIniFilePath);
+	BOOL bISDBT = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-T", 0, szIniFilePath);
+	BOOL bISDBS = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-S", 0, szIniFilePath);
+
+	if (!bUseKnownGUID) {
+		return S_OK;
+	}
+
+	wstring tunerDisplayName = szTunerDisplayName;
+	wstring captureDisplayName = szCaptureDisplayName;
+
+	// チューナーデバイスとキャプチャーデバイスの組合せが正しいか確認
+	if (bISDBS && !bISDBT) {
+		for (int i = 0; i < sizeof KNOWN_GUIDS_S / sizeof KNOWN_GUIDS_S[0]; i++) {
+			if (tunerDisplayName.find(KNOWN_GUIDS_S[i].Tuner) != wstring::npos && captureDisplayName.find(KNOWN_GUIDS_S[i].Capture) != wstring::npos) {
+				return S_OK;
+			}
+		}
+	}
+	else if (bISDBT && !bISDBS) {
+		for (int i = 0; i < sizeof KNOWN_GUIDS_T / sizeof KNOWN_GUIDS_T[0]; i++) {
+			if (tunerDisplayName.find(KNOWN_GUIDS_T[i].Tuner) != wstring::npos && captureDisplayName.find(KNOWN_GUIDS_T[i].Capture) != wstring::npos) {
+				return S_OK;
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < sizeof KNOWN_GUIDS_3 / sizeof KNOWN_GUIDS_3[0]; i++) {
+			if (tunerDisplayName.find(KNOWN_GUIDS_3[i].Tuner) != wstring::npos && captureDisplayName.find(KNOWN_GUIDS_3[i].Capture) != wstring::npos) {
+				return S_OK;
+			}
+		}
+	}
+	OutputDebug(L"Capture GUID not match.\n");
+
+	return E_FAIL;
 }
 
 CPlexPXSpecials::CPlexPXSpecials(HMODULE hMySelf, CComPtr<IBaseFilter> pTunerDevice)
