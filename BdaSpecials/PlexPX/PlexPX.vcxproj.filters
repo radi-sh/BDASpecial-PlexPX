@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="doc">
+      <UniqueIdentifier>{e51a7fe2-e231-4125-9bf4-1f86c795590e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PlexPX.cpp">
@@ -41,5 +44,21 @@
     <ClInclude Include="..\..\common\LockChannel.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\doc\BonDriver_PlexPX_S.ini">
+      <Filter>doc</Filter>
+    </None>
+    <None Include="..\..\doc\BonDriver_PlexPX_S3U.ini">
+      <Filter>doc</Filter>
+    </None>
+    <None Include="..\..\doc\BonDriver_PlexPX_T.ini">
+      <Filter>doc</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\doc\History-PlexPX.txt">
+      <Filter>doc</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -240,6 +240,14 @@
     <ClInclude Include="aes.h" />
     <ClInclude Include="PlexPX.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\doc\BonDriver_PlexPX_S.ini" />
+    <None Include="..\..\doc\BonDriver_PlexPX_S3U.ini" />
+    <None Include="..\..\doc\BonDriver_PlexPX_T.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\doc\History-PlexPX.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
