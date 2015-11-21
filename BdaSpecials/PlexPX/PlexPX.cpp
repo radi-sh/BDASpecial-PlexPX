@@ -171,7 +171,17 @@ static inline HRESULT plex_set_sid(IKsPropertySet *pIKsPropertySet, DWORD dwFlag
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
-	hMySelf = hModule;
+	switch (ul_reason_for_call) {
+	case DLL_PROCESS_ATTACH:
+		// モジュールハンドル保存
+		hMySelf = hModule;
+		break;
+
+	case DLL_PROCESS_DETACH:
+		// デバッグログファイルのクローズ
+		CloseDebugLog();
+		break;
+	}
     return TRUE;
 }
 
