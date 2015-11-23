@@ -12,3 +12,7 @@
 ・チューナとキャプチャの組合せか正しいかどうかGUIDを確認するようにした（W3PEのBSoD対策）
 　BonDriver_BDAの2015-10-12版以後が必要です
 
+【2015-11-23】
+・Readme-PlexPX.txt追加
+・DLL_PROCESS_DETACH時にデバッグログファイルのクローズを行うようにした
+
