@@ -247,6 +247,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\doc\History-PlexPX.txt" />
+    <Text Include="..\..\doc\Readme-PlexPX.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -60,5 +60,8 @@
     <Text Include="..\..\doc\History-PlexPX.txt">
       <Filter>doc</Filter>
     </Text>
+    <Text Include="..\..\doc\Readme-PlexPX.txt">
+      <Filter>doc</Filter>
+    </Text>
   </ItemGroup>
 </Project>
