@@ -16,16 +16,20 @@
 
 using namespace std;
 
-#define PLEX_FUNC_GET_FLAGS	0x0c			// Get Flags
-#define PLEX_FUNC_GET_RAND	0x0d			// Get Rand
-#define PLEX_FUNC_INIT	0x09				// Init
-#define PLEX_FUNC_DECODE	0x0a			// Decode
-#define PLEX_FUNC_SET_MULTI2	0x14		// Set M2_Dec
-#define PLEX_FUNC_SET_TSID	0x2f			// Set TSID
-#define PLEX_FUNC_SET_SID	0x31			// Set SID
+#define PLEX_FUNC_INIT				0x09	// Init
+#define PLEX_FUNC_DECODE			0x0a	// Decode
+#define PLEX_FUNC_GET_FLAGS			0x0c	// Get Flags
+#define PLEX_FUNC_GET_RAND			0x0d	// Get Rand
+#define PLEX_FUNC_ENCRYPT			0x10	// Encrypt
+#define PLEX_FUNC_DECRYPT			0x11	// Decrypt
+#define PLEX_FUNC_SET_MULTI2		0x14	// Set M2_Dec
+#define PLEX_FUNC_SET_TSID			0x2f	// Set TSID
+#define PLEX_FUNC_SET_SID			0x31	// Set SID
 #define PLEX_FUNC_GET_SIGNAL_LEVEL	0x3a	// Get Signal Level
+#define PLEX_FUNC_SET_SPECIAL		0x44    // used in SetLNBPower
+#define PLEX_FUNC_GET_SPECIAL		0x45    // used in SetLNBPower
 
-static const GUID CLSID_PropSet = { 0x9E1781E1,0x9CB1,0x4407,{ 0xBB,0xCE,0x54,0x26,0xC8,0xD0,0x0A,0x4B } };
+static const GUID CLSID_PropSet = {0x9e1781e1, 0x9cb1, 0x4407, {0xbb, 0xce, 0x54, 0x26, 0xc8, 0xd0, 0x0a, 0x4b}};
 
 struct TunerAndCaptureGuid {
 	const wstring Tuner;
