@@ -21,9 +21,6 @@
     <ClCompile Include="PlexPX.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="aes.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PlexPX.h">
@@ -38,10 +35,10 @@
     <ClInclude Include="..\..\common\IBdaSpecials2.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="aes.h">
+    <ClInclude Include="..\..\common\LockChannel.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\LockChannel.h">
+    <ClInclude Include="..\..\aes\Rijndael.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

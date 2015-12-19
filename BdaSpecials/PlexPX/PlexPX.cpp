@@ -4,15 +4,16 @@
 #include <string>
 
 #include "PlexPX.h"
-#include "aes.h"
+#include "Rijndael.h"
 
 #include <iostream>
 #include <dshow.h>
 
 #include "common.h"
 
+#pragma comment(lib, "Strmiids.lib" )
 
-#pragma comment( lib, "Strmiids.lib" )
+#pragma comment(lib, "aes.lib")
 
 using namespace std;
 
@@ -75,6 +76,30 @@ static const TunerAndCaptureGuid KNOWN_GUIDS_3[] = {
 
 HMODULE hMySelf;
 
+static const BYTE SeedInit[32] = {
+	0x61, 0xd8, 0x56, 0x3d, 0xc1, 0x15, 0x46, 0x68, 0xb2, 0xec, 0x6f, 0xa9, 0xed, 0x45, 0x33, 0x81,
+	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10,
+};
+
+static const BYTE SeedM2Dec[16] = {
+	0xaa, 0xcb, 0x1e, 0x40, 0x5f, 0x43, 0x42, 0x50, 0x84, 0xfe, 0xa1, 0x1b, 0xc4, 0xb2, 0xb9, 0x1f,
+};
+
+static const BYTE SeedDecode[16] = {
+	0x3c, 0x51, 0x93, 0x13, 0x9b, 0xa2, 0x41, 0xc9, 0xb3, 0xfe, 0xb5, 0xda, 0xfe, 0xa0, 0x05, 0xe2,
+};
+
+static const BYTE DecodeTable[32] = {
+	0x40, 0x5b, 0x99, 0xcc, 0x69, 0x54, 0x42, 0xd6, 0xad, 0x0a, 0x95, 0x27, 0x46, 0x92, 0x6b, 0x73,
+	0x1c, 0x1a, 0x39, 0xfb, 0x21, 0xd7, 0x4f, 0xe5,	0x8b, 0xec, 0x1f, 0x5f, 0xd3, 0x79, 0x7a, 0x13,
+};
+
+static inline void block_xor(BYTE *ret, const BYTE *val1, const BYTE *val2)
+{
+	for (int i = 0; i < 16; i++)
+		ret[i] = val1[i] ^ val2[i];
+}
+
 static inline HRESULT plex_get_flags(IKsPropertySet *pIKsPropertySet, DWORD *pdwFlag)
 {
 	DWORD dwBytes;
@@ -85,19 +110,19 @@ static inline HRESULT plex_init_tuner(IKsPropertySet *pIKsPropertySet, DWORD dwF
 {
 	HRESULT hr = S_OK;
 	DWORD dwBytes;
-	const BYTE Seed[16] = { 0x61, 0xd8, 0x56, 0x3d, 0xc1, 0x15, 0x46, 0x68, 0xb2, 0xec, 0x6f, 0xa9, 0xed, 0x45, 0x33, 0x81 };
-	const BYTE Data[16] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10 };
-	BYTE Key[32], Rand[16];
-	CopyMemory(Key, Seed, sizeof(Seed));
-	CopyMemory(&Key[16], Data, sizeof(Data));
+	DWORD dwTemp[44];
+	BYTE Key[32], Rand[16], buf[16];
+	CopyMemory(Key, SeedInit, sizeof(SeedInit));
 	if (dwFlag & 0x01) {
 		if (SUCCEEDED(hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_GET_RAND, NULL, 0, Rand, sizeof(Rand), &dwBytes))) {
+			block_xor(buf, SeedInit, Rand);
 			if (dwFlag & 0x80) {
-				aes_gen_key2(Key, Seed, Rand);
+				fake_set_key_encrypt(dwTemp, buf);
 			}
 			else {
-				aes_gen_key(Key, Seed, Rand);
+				Rijndael_set_key_encrypt(dwTemp, buf);
 			}
+			CopyMemory(Key, &dwTemp[40], 16);
 		}
 	}
 
@@ -107,16 +132,17 @@ static inline HRESULT plex_init_tuner(IKsPropertySet *pIKsPropertySet, DWORD dwF
 
 	if (m2dec) {
 		// M2_DecÝ’è
-		const BYTE Seed2[16] = { 0xaa, 0xcb, 0x1e, 0x40, 0x5f, 0x43, 0x42, 0x50, 0x84, 0xfe, 0xa1, 0x1b, 0xc4, 0xb2, 0xb9, 0x1f };
 		BYTE Key2[16];
-		CopyMemory(Key2, Seed2, sizeof(Seed2));
+		CopyMemory(Key2, SeedM2Dec, sizeof(SeedM2Dec));
 		if (SUCCEEDED(hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_GET_RAND, NULL, 0, Rand, sizeof(Rand), &dwBytes))) {
+			block_xor(buf, SeedM2Dec, Rand);
 			if (dwFlag & 0x80) {
-				aes_gen_key2(Key2, Seed2, Rand);
+				fake_set_key_encrypt(dwTemp, buf);
 			}
 			else {
-				aes_gen_key(Key2, Seed2, Rand);
+				Rijndael_set_key_encrypt(dwTemp, buf);
 			}
+			CopyMemory(Key2, &dwTemp[40], 16);
 		}
 
 		hr = pIKsPropertySet->Set(CLSID_PropSet, PLEX_FUNC_SET_MULTI2, NULL, 0, Key2, sizeof(Key2));
@@ -129,15 +155,31 @@ static inline HRESULT plex_decode(IKsPropertySet *pIKsPropertySet, DWORD dwFlag,
 {
 	HRESULT hr = S_OK;
 	DWORD dwBytes;
-	const BYTE Seed[16] = { 0x3c, 0x51, 0x93, 0x13, 0x9b, 0xa2, 0x41, 0xc9, 0xb3, 0xfe, 0xb5, 0xda, 0xfe, 0xa0, 0x05, 0xe2 };
+	DWORD dwKey[44];
+	BYTE Rand[16];
+	BOOL bNeedDecrypt = FALSE;
 
 	if (dwFlag & 0x08) {
-		// Not support AES decode by myself.
-		return E_FAIL;
+		if (SUCCEEDED(hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_GET_RAND, NULL, 0, Rand, sizeof(Rand), &dwBytes))) {
+			BYTE buf[16];
+			block_xor(buf, SeedDecode, Rand);
+			Rijndael_set_key_decrypt(dwKey, buf);
+			bNeedDecrypt = TRUE;
+		}
 	}
 
 	if (SUCCEEDED(hr = pIKsPropertySet->Set(CLSID_PropSet, PLEX_FUNC_DECODE, NULL, 0, pBuf, dwSize))) {
-		hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_DECODE, NULL, 0, pBuf, dwSize, &dwBytes);
+		if (SUCCEEDED(hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_DECODE, NULL, 0, pBuf, dwSize, &dwBytes)) && bNeedDecrypt) {
+			BYTE *p = pBuf;
+			for (DWORD i = 0; i < dwSize; i += 188, p += 188) {
+				for (DWORD j = 4; j < 0xa4; j += 0x20) {
+					Rijndael_decrypt(dwKey, &p[j], &p[j]);
+				}
+				for (DWORD j = 4; j < 188; j++) {
+					p[j] ^= DecodeTable[(j - 4) & 0x1f];
+				}
+			}
+		}
 	}
 
 	return hr;
