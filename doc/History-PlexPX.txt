@@ -16,3 +16,8 @@
 ・Readme-PlexPX.txt追加
 ・DLL_PROCESS_DETACH時にデバッグログファイルのクローズを行うようにした
 
+【2015-12-23】
+・開発環境をVisual Studio Community 2015 Update 1に変更
+・複数プロセスから同じBonDriverを開いている場合でもDebugLogオプションがそれぞれで有効になるようにした
+・AES暗号化関係を、libObfuscateから派生したライブラリを静的リンクするよう変更
+
