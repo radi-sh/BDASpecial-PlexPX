@@ -30,7 +30,6 @@
     <RootNamespace>PlexPX</RootNamespace>
     <ProjectName>PlexPX</ProjectName>
     <ProjectGuid>{AAA74DAA-A692-4C03-91E6-21B57109A286}</ProjectGuid>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
