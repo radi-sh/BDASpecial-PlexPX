@@ -21,3 +21,8 @@
 ・複数プロセスから同じBonDriverを開いている場合でもDebugLogオプションがそれぞれで有効になるようにした
 ・AES暗号化関係を、libObfuscateから派生したライブラリを静的リンクするよう変更
 
+【2016-01-10】
+・BonDriver_BDAでの変更に伴う構造体・Class変更
+・BonDriver_BDAでBandWidth設定が有効になっていなかった点を修正したことにより発生する衛星チューナの選局に失敗する不具合対策
+・BonDriver_PlexPX_T.iniのDefaultNetworkを2から3に変更
+

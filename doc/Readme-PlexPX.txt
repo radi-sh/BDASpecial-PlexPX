@@ -8,7 +8,7 @@ BonDriver_BDA.dllと組み合わせて使用します。
 Windows XP以降 (x86/x64)
 
 【対応チューナー】
-Plex社製の下記のチューナーに対応しています。
+Plex社製の下記のチューナーに対応しています（たぶん）。
   PX-Q3PE
   PX-W3PE
   PX-W3PE V2
