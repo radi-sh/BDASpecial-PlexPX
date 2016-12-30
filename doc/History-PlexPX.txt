@@ -26,3 +26,10 @@
 ・BonDriver_BDAでBandWidth設定が有効になっていなかった点を修正したことにより発生する衛星チューナの選局に失敗する不具合対策
 ・BonDriver_PlexPX_T.iniのDefaultNetworkを2から3に変更
 
+【2016-12-30】
+・開発環境をVisual Studio Community 2015 Update 3に変更
+・PX-W3PE V2でチューナーが自動選択できない問題を修正
+　Nekopandaさんありがとうございます
+・PX-S3Uでも存在しないチューナーを選択してしまう問題を修正
+・サンプルiniファイルに既知のFriendlyName/CaputureFriendlyNameを列挙
+

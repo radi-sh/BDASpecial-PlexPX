@@ -68,9 +68,11 @@ https://github.com/radi-sh/BDASpecial-PlexPX/releases
 専用のサポート場所はありません。
 下記2chスレに書込むとそのうち何か反応があるかもしれません。
 (リリース時現在)
-PX-W3U3　Part.16 【W3U2・S3U2・S3U】
-http://peace.2ch.net/test/read.cgi/avi/1446925876/
-作者は多忙になると長期間スレを見なくなる傾向が有りますのでご容赦ください。
+PX-W3U3　Part18 【W3U2・S3U2・S3U】
+http://echo.2ch.net/test/read.cgi/avi/1482269834/
+PX-W3PE・PX-Q3PE Part.40
+http://echo.2ch.net/test/read.cgi/avi/1482290942/
+作者は多忙を言い訳にあまりスレを見ていない傾向に有りますがご容赦ください。
 
 【免責事項】
 BDASpecialプラグインおよびBonDriver_BDAや付属するもの、ドキュメントの記載事項などに起因して発生する損害事項等の責任はすべて使用者に依存し、作者・関係者は一切の責任を負いません。
