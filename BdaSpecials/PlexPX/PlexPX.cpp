@@ -92,6 +92,8 @@ static const TunerAndCaptureGuid KNOWN_GUIDS_3[] = {
 	//{ L"{cd93ac8b-8e1f-4a3e-98fc-b89c44817ee1}", L"{5e59138b-5322-4f1c-a03c-ce721a11a0a6}", },	// PX-S3U Tuner 1 ‚½‚Ô‚ñ‚±‚ê‚à‹U•¨
 };
 
+FILE *g_fpLog = NULL;
+
 HMODULE hMySelf;
 
 static const BYTE SeedInit[32] = {
