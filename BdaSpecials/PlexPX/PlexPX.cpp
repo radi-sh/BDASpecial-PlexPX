@@ -132,7 +132,7 @@ static inline HRESULT plex_init_tuner(IKsPropertySet *pIKsPropertySet, DWORD dwF
 	DWORD dwBytes;
 	DWORD dwTemp[44];
 	BYTE Key[32], Rand[16], buf[16];
-	CopyMemory(Key, SeedInit, sizeof(SeedInit));
+	memcpy(Key, SeedInit, sizeof(SeedInit));
 	if (dwFlag & 0x01) {
 		if (SUCCEEDED(hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_GET_RAND, NULL, 0, Rand, sizeof(Rand), &dwBytes))) {
 			block_xor(buf, SeedInit, Rand);
@@ -142,7 +142,7 @@ static inline HRESULT plex_init_tuner(IKsPropertySet *pIKsPropertySet, DWORD dwF
 			else {
 				Rijndael_set_key_encrypt(dwTemp, buf);
 			}
-			CopyMemory(Key, &dwTemp[40], 16);
+			memcpy(Key, &dwTemp[40], 16);
 		}
 	}
 
@@ -153,7 +153,7 @@ static inline HRESULT plex_init_tuner(IKsPropertySet *pIKsPropertySet, DWORD dwF
 	if (m2dec) {
 		// M2_DecÝ’è
 		BYTE Key2[16];
-		CopyMemory(Key2, SeedM2Dec, sizeof(SeedM2Dec));
+		memcpy(Key2, SeedM2Dec, sizeof(SeedM2Dec));
 		if (SUCCEEDED(hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_GET_RAND, NULL, 0, Rand, sizeof(Rand), &dwBytes))) {
 			block_xor(buf, SeedM2Dec, Rand);
 			if (dwFlag & 0x80) {
@@ -162,7 +162,7 @@ static inline HRESULT plex_init_tuner(IKsPropertySet *pIKsPropertySet, DWORD dwF
 			else {
 				Rijndael_set_key_encrypt(dwTemp, buf);
 			}
-			CopyMemory(Key2, &dwTemp[40], 16);
+			memcpy(Key2, &dwTemp[40], 16);
 		}
 
 		hr = pIKsPropertySet->Set(CLSID_PropSet, PLEX_FUNC_SET_MULTI2, NULL, 0, Key2, sizeof(Key2));
