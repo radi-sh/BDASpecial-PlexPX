@@ -11,26 +11,13 @@
 
 #include "common.h"
 
+#include "AsicenPropset.h"
+
 #pragma comment(lib, "Strmiids.lib" )
 
 #pragma comment(lib, "aes.lib")
 
 using namespace std;
-
-#define PLEX_FUNC_INIT				0x09	// Init
-#define PLEX_FUNC_DECODE			0x0a	// Decode
-#define PLEX_FUNC_GET_FLAGS			0x0c	// Get Flags
-#define PLEX_FUNC_GET_RAND			0x0d	// Get Rand
-#define PLEX_FUNC_ENCRYPT			0x10	// Encrypt
-#define PLEX_FUNC_DECRYPT			0x11	// Decrypt
-#define PLEX_FUNC_SET_MULTI2		0x14	// Set M2_Dec
-#define PLEX_FUNC_SET_TSID			0x2f	// Set TSID
-#define PLEX_FUNC_SET_SID			0x31	// Set SID
-#define PLEX_FUNC_GET_SIGNAL_LEVEL	0x3a	// Get Signal Level
-#define PLEX_FUNC_SET_SPECIAL		0x44    // used in SetLNBPower
-#define PLEX_FUNC_GET_SPECIAL		0x45    // used in SetLNBPower
-
-static const GUID CLSID_PropSet = {0x9e1781e1, 0x9cb1, 0x4407, {0xbb, 0xce, 0x54, 0x26, 0xc8, 0xd0, 0x0a, 0x4b}};
 
 struct TunerAndCaptureGuid {
 	const wstring Tuner;
@@ -120,119 +107,26 @@ static inline void block_xor(BYTE *ret, const BYTE *val1, const BYTE *val2)
 		ret[i] = val1[i] ^ val2[i];
 }
 
-static inline HRESULT plex_get_flags(IKsPropertySet *pIKsPropertySet, DWORD *pdwFlag)
+static inline void set_key_encrypt(DWORD *pdwRoundKey, const BYTE *pcbyKey, DWORD dwFlag)
 {
-	DWORD dwBytes;
-	return pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_GET_FLAGS, NULL, 0, pdwFlag, sizeof(DWORD), &dwBytes);
+	if (dwFlag & 0x80) {
+		fake_set_key_encrypt(pdwRoundKey, pcbyKey);
+	}
+	else {
+		Rijndael_set_key_encrypt(pdwRoundKey, pcbyKey);
+	}
 }
 
-static inline HRESULT plex_init_tuner(IKsPropertySet *pIKsPropertySet, DWORD dwFlag, BOOL m2dec)
+static inline void decrypt_buf(BYTE *pbyBuf, DWORD dwSize, DWORD *pdwRoundKey)
 {
-	HRESULT hr = S_OK;
-	DWORD dwBytes;
-	DWORD dwTemp[44];
-	BYTE Key[32], Rand[16], buf[16];
-	memcpy(Key, SeedInit, sizeof(SeedInit));
-	if (dwFlag & 0x01) {
-		if (SUCCEEDED(hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_GET_RAND, NULL, 0, Rand, sizeof(Rand), &dwBytes))) {
-			block_xor(buf, SeedInit, Rand);
-			if (dwFlag & 0x80) {
-				fake_set_key_encrypt(dwTemp, buf);
-			}
-			else {
-				Rijndael_set_key_encrypt(dwTemp, buf);
-			}
-			memcpy(Key, &dwTemp[40], 16);
+	for (int i = 0; i < (int)dwSize; i += 188, pbyBuf += 188) {
+		for (int j = 4; j < 164; j += 32) {
+			Rijndael_decrypt(pdwRoundKey, &pbyBuf[j], &pbyBuf[j]);
+		}
+		for (int j = 4; j < 188; j++) {
+			pbyBuf[j] ^= DecodeTable[(j - 4) & 0x1f];
 		}
 	}
-
-	if (FAILED(hr = pIKsPropertySet->Set(CLSID_PropSet, PLEX_FUNC_INIT, NULL, 0, Key, sizeof(Key)))) {
-		return hr;
-	}
-
-	if (m2dec) {
-		// M2_Decê›íË
-		BYTE Key2[16];
-		memcpy(Key2, SeedM2Dec, sizeof(SeedM2Dec));
-		if (SUCCEEDED(hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_GET_RAND, NULL, 0, Rand, sizeof(Rand), &dwBytes))) {
-			block_xor(buf, SeedM2Dec, Rand);
-			if (dwFlag & 0x80) {
-				fake_set_key_encrypt(dwTemp, buf);
-			}
-			else {
-				Rijndael_set_key_encrypt(dwTemp, buf);
-			}
-			memcpy(Key2, &dwTemp[40], 16);
-		}
-
-		hr = pIKsPropertySet->Set(CLSID_PropSet, PLEX_FUNC_SET_MULTI2, NULL, 0, Key2, sizeof(Key2));
-	}
-
-	return hr;
-}
-
-static inline HRESULT plex_decode(IKsPropertySet *pIKsPropertySet, DWORD dwFlag, BYTE *pBuf, DWORD dwSize)
-{
-	HRESULT hr = S_OK;
-	DWORD dwBytes;
-	DWORD dwKey[44];
-	BYTE Rand[16];
-	BOOL bNeedDecrypt = FALSE;
-
-	if (dwFlag & 0x08) {
-		if (SUCCEEDED(hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_GET_RAND, NULL, 0, Rand, sizeof(Rand), &dwBytes))) {
-			BYTE buf[16];
-			block_xor(buf, SeedDecode, Rand);
-			Rijndael_set_key_decrypt(dwKey, buf);
-			bNeedDecrypt = TRUE;
-		}
-	}
-
-	if (SUCCEEDED(hr = pIKsPropertySet->Set(CLSID_PropSet, PLEX_FUNC_DECODE, NULL, 0, pBuf, dwSize))) {
-		if (SUCCEEDED(hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_DECODE, NULL, 0, pBuf, dwSize, &dwBytes)) && bNeedDecrypt) {
-			BYTE *p = pBuf;
-			for (DWORD i = 0; i < dwSize; i += 188, p += 188) {
-				for (DWORD j = 4; j < 0xa4; j += 0x20) {
-					Rijndael_decrypt(dwKey, &p[j], &p[j]);
-				}
-				for (DWORD j = 4; j < 188; j++) {
-					p[j] ^= DecodeTable[(j - 4) & 0x1f];
-				}
-			}
-		}
-	}
-
-	return hr;
-}
-
-static inline HRESULT plex_get_signal_level(IKsPropertySet *pIKsPropertySet, DWORD dwFlag, DWORD *pdwLevel)
-{
-	HRESULT hr = S_OK;
-	DWORD dwBytes;
-	BYTE buf[4];
-	if (FAILED(hr = pIKsPropertySet->Get(CLSID_PropSet, PLEX_FUNC_GET_SIGNAL_LEVEL, NULL, 0, buf, sizeof(buf), &dwBytes))) {
-		return hr;
-	}
-
-	*pdwLevel = *(DWORD*)buf;
-	return hr;
-}
-
-static inline HRESULT plex_set_tsid(IKsPropertySet *pIKsPropertySet, DWORD dwFlag, DWORD tsid)
-{
-	BYTE buf[8];
-	*(DWORD *)buf = tsid;
-	*(DWORD *)&buf[4] = 0;
-
-	return pIKsPropertySet->Set(CLSID_PropSet, PLEX_FUNC_SET_TSID, NULL, 0, buf, sizeof(buf));
-}
-
-static inline HRESULT plex_set_sid(IKsPropertySet *pIKsPropertySet, DWORD dwFlag, DWORD sid)
-{
-	BYTE buf[4];
-	*(DWORD *)buf = sid;
-
-	return pIKsPropertySet->Set(CLSID_PropSet, PLEX_FUNC_SET_SID, NULL, 0, buf, sizeof(buf));
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
@@ -335,18 +229,39 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 		return hr;
 	}
 
-	DWORD dwFlag;
-
 	// FlagéÊìæ
-	hr = plex_get_flags(pIKsPropertySet, &dwFlag);
+	DWORD dwFlag;
+	hr = asicen_GetFlags(pIKsPropertySet, &dwFlag);
 	if (FAILED(hr)) {
 		return hr;
 	}
 
-	// Tunerèâä˙âª
-	hr = plex_init_tuner(pIKsPropertySet, dwFlag, bM2_Dec);
-	if (FAILED(hr)) {
+	DWORD rk[44];
+	BYTE KeyInit[32], Rand[16], buf[16];
+	memcpy(KeyInit, SeedInit, sizeof(SeedInit));
+	if (dwFlag & 0x01) {
+		if (SUCCEEDED(hr = asicen_GetRand(pIKsPropertySet, Rand, sizeof(Rand)))) {
+			block_xor(buf, SeedInit, Rand);
+			set_key_encrypt(rk, buf, dwFlag);
+			memcpy(KeyInit, &rk[40], 16);
+		}
+	}
+
+	if (FAILED(hr = asicen_Init(pIKsPropertySet, KeyInit, sizeof(KeyInit)))) {
 		return hr;
+	}
+
+	if (bM2_Dec) {
+		// M2_Decê›íË
+		BYTE KeyM2Dec[16];
+		memcpy(KeyM2Dec, SeedM2Dec, sizeof(SeedM2Dec));
+		if (SUCCEEDED(hr = asicen_GetRand(pIKsPropertySet, Rand, sizeof(Rand)))) {
+			block_xor(buf, SeedM2Dec, Rand);
+			set_key_encrypt(rk, buf, dwFlag);
+			memcpy(KeyM2Dec, &rk[40], 16);
+		}
+
+		hr = asicen_SetMulti2(pIKsPropertySet, KeyM2Dec, sizeof(KeyM2Dec));
 	}
 
 	return S_OK;
@@ -406,7 +321,7 @@ CPlexPXSpecials::CPlexPXSpecials(HMODULE hMySelf, CComPtr<IBaseFilter> pTunerDev
 	hr = m_pTunerDevice->QueryInterface(IID_IKsPropertySet, (LPVOID*)&m_pIKsPropertySet);
 
 	::EnterCriticalSection(&m_CriticalSection);
-	hr = plex_get_flags(m_pIKsPropertySet, &m_dwFlag);
+	hr = asicen_GetFlags(m_pIKsPropertySet, &m_dwFlag);
 	::LeaveCriticalSection(&m_CriticalSection);
 
 	return;
@@ -494,8 +409,24 @@ const HRESULT CPlexPXSpecials::Decode(BYTE *pBuf, DWORD dwSize)
 		return E_FAIL;
 	}
 
+	HRESULT hr = S_OK;
+	DWORD rk[44];
+	BYTE Rand[16];
+	BOOL bNeedDecrypt = FALSE;
+
 	::EnterCriticalSection(&m_CriticalSection);
-	HRESULT hr = plex_decode(m_pIKsPropertySet, m_dwFlag, pBuf, dwSize);
+	if (m_dwFlag & 0x08) {
+		if (SUCCEEDED(hr = asicen_GetRand(m_pIKsPropertySet, Rand, sizeof(Rand)))) {
+			BYTE buf[16];
+			block_xor(buf, SeedDecode, Rand);
+			Rijndael_set_key_decrypt(rk, buf);
+			bNeedDecrypt = TRUE;
+		}
+	}
+
+	if (SUCCEEDED(hr = asicen_Decode(m_pIKsPropertySet, pBuf, dwSize)) && bNeedDecrypt) {
+		decrypt_buf(pBuf, dwSize, rk);
+	}
 	::LeaveCriticalSection(&m_CriticalSection);
 
 	return hr;
@@ -507,7 +438,7 @@ const HRESULT CPlexPXSpecials::GetSignalStrength(float *fVal)
 	DWORD level;
 
 	::EnterCriticalSection(&m_CriticalSection);
-	hr = plex_get_signal_level(m_pIKsPropertySet, m_dwFlag, &level);
+	hr = asicen_GetSignalLevel(m_pIKsPropertySet, &level);
 	::LeaveCriticalSection(&m_CriticalSection);
 	if (FAILED(hr)) {
 		return hr;
@@ -542,7 +473,7 @@ const HRESULT CPlexPXSpecials::PostLockChannel(const TuningParam *pTuningParm)
 
 	if (pTuningParm->TSID != 0 && pTuningParm->TSID != -1) {
 		::EnterCriticalSection(&m_CriticalSection);
-		hr = plex_set_tsid(m_pIKsPropertySet, m_dwFlag, (DWORD)pTuningParm->TSID);
+		hr = asicen_SetTSID(m_pIKsPropertySet, (DWORD)pTuningParm->TSID);
 		::LeaveCriticalSection(&m_CriticalSection);
 		if (FAILED(hr)) {
 			return hr;
@@ -551,7 +482,7 @@ const HRESULT CPlexPXSpecials::PostLockChannel(const TuningParam *pTuningParm)
 
 	if (pTuningParm->SID != 0 && pTuningParm->SID != -1) {
 		::EnterCriticalSection(&m_CriticalSection);
-		hr = plex_set_sid(m_pIKsPropertySet, m_dwFlag, (DWORD)pTuningParm->SID);
+		hr = asicen_SetSID(m_pIKsPropertySet, (DWORD)pTuningParm->SID);
 		::LeaveCriticalSection(&m_CriticalSection);
 	}
 

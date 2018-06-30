@@ -243,6 +243,7 @@
     <ClInclude Include="..\..\common\IBdaSpecials2.h" />
     <ClInclude Include="..\..\common\LockChannel.h" />
     <ClInclude Include="PlexPX.h" />
+    <ClInclude Include="AsicenPropset.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\doc\BonDriver_PlexPX_S.ini" />
