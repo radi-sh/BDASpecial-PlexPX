@@ -168,9 +168,9 @@ static inline HRESULT asicen_GetSignalLevel(IKsPropertySet *pIKsPropertySet, DWO
 	return pIKsPropertySet->Get(KSPROPSETID_AsicenExtension, KSPROPERTY_ASICEN_EX_GET_SIGNAL_LEVEL, NULL, 0, pdwLevel, sizeof(*pdwLevel), &dwBytes);
 }
 
-static inline HRESULT asicen_SetTSID(IKsPropertySet *pIKsPropertySet, DWORD dwTSID)
+static inline HRESULT asicen_SetTSID(IKsPropertySet *pIKsPropertySet, QWORD qwTSID)
 {
-	return pIKsPropertySet->Set(KSPROPSETID_AsicenExtension, KSPROPERTY_ASICEN_EX_SET_TSID, NULL, 0, &dwTSID, sizeof(dwTSID));
+	return pIKsPropertySet->Set(KSPROPSETID_AsicenExtension, KSPROPERTY_ASICEN_EX_SET_TSID, NULL, 0, &qwTSID, sizeof(qwTSID));
 }
 
 static inline HRESULT asicen_SetSID(IKsPropertySet *pIKsPropertySet, DWORD dwSID)

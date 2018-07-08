@@ -473,7 +473,7 @@ const HRESULT CPlexPXSpecials::PostLockChannel(const TuningParam *pTuningParm)
 
 	if (pTuningParm->TSID != 0 && pTuningParm->TSID != -1) {
 		::EnterCriticalSection(&m_CriticalSection);
-		hr = asicen_SetTSID(m_pIKsPropertySet, (DWORD)pTuningParm->TSID);
+		hr = asicen_SetTSID(m_pIKsPropertySet, pTuningParm->TSID);
 		::LeaveCriticalSection(&m_CriticalSection);
 		if (FAILED(hr)) {
 			return hr;
