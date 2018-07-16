@@ -66,12 +66,7 @@ https://github.com/radi-sh/BDASpecial-PlexPX/releases
 
 E•s‹ï‡•ñ“™
 ê—p‚ÌƒTƒ|[ƒgêŠ‚Í‚ ‚è‚Ü‚¹‚ñB
-‰º‹L2chƒXƒŒ‚É‘ž‚Þ‚Æ‚»‚Ì‚¤‚¿‰½‚©”½‰ž‚ª‚ ‚é‚©‚à‚µ‚ê‚Ü‚¹‚ñB
-(ƒŠƒŠ[ƒXŽžŒ»Ý)
-PX-W3U3@Part18 yW3U2ES3U2ES3Uz
-http://echo.2ch.net/test/read.cgi/avi/1482269834/
-PX-W3PEEPX-Q3PE Part.40
-http://echo.2ch.net/test/read.cgi/avi/1482290942/
+5ch‚Ì‰f‘œ§ì”Â‚ÌŠY“–ƒXƒŒ‚ð’T‚µ‚Ä‘ž‚Þ‚Æ‚»‚Ì‚¤‚¿‰½‚©”½‰ž‚ª‚ ‚é‚©‚à‚µ‚ê‚Ü‚¹‚ñB
 ìŽÒ‚Í‘½–Z‚ðŒ¾‚¢–ó‚É‚ ‚Ü‚èƒXƒŒ‚ðŒ©‚Ä‚¢‚È‚¢ŒXŒü‚É—L‚è‚Ü‚·‚ª‚²—eŽÍ‚­‚¾‚³‚¢B
 
 y–ÆÓŽ–€z
@@ -82,7 +77,7 @@ BDASpecialƒvƒ‰ƒOƒCƒ“‚¨‚æ‚ÑBonDriver_BDA‚â•t‘®‚·‚é‚à‚ÌAƒhƒLƒ…ƒƒ“ƒg‚Ì‹LÚŽ–€‚È‚
 EAESˆÃ†‰»‚ÉŠÖ‚·‚éˆ—‚ÍAuAdvanced Embedded Solutions SAGLv‚Ì’˜ì•¨‚Å‚ ‚élibObfuscate(http://www.embeddedsw.net/libobfuscate.html)‚ÉŠÜ‚Ü‚ê‚éRijndael.cpp‚ðŠî‚É‰ü•Ï‚³‚ê‚½ƒ‰ƒCƒuƒ‰ƒŠ‚ðÃ“IƒŠƒ“ƒN‚ÅŽg—p‚µ‚Ä‚¢‚Ü‚·B
 @ƒ‰ƒCƒuƒ‰ƒŠ‚Ìƒ\[ƒXƒR[ƒh‚ÍA‰º‹L‚æ‚è“üŽè‰Â”\‚Å‚·B
 @https://github.com/radi-sh/Rijndael4plex
-EPlex PXƒVƒŠ[ƒY‚ÌƒIƒŠƒWƒiƒ‹ˆ—Žü‚è‚Ì‚Ù‚Æ‚ñ‚Ç‚Í2ch‚ÌBonDriver‹¤—Lƒc[ƒ‹‘‡ƒXƒŒ‚ÌŸSALrG1ld3mTc—l‚Ì‰ðÍŒ‹‰Ê‘ž‚Ý‚ðŽg—p‚³‚¹‚Ä‚¢‚½‚¾‚«‚Ü‚µ‚½B
+EPlex PXƒVƒŠ[ƒY‚ÌƒIƒŠƒWƒiƒ‹ˆ—Žü‚è‚Ì‚Ù‚Æ‚ñ‚Ç‚Í‹Œ2ch‚ÌBonDriver‹¤—Lƒc[ƒ‹‘‡ƒXƒŒ‚ÌŸSALrG1ld3mTc—l‚Ì‰ðÍŒ‹‰Ê‘ž‚Ý‚ðŽg—p‚³‚¹‚Ä‚¢‚½‚¾‚«‚Ü‚µ‚½B
 E‚Ü‚½ALGPL 3.0‚Å‚ ‚élibObfuscate‚Ìˆê•”ƒR[ƒh‚ðŠÜ‚Þ‚ÆŽv‚í‚ê‚éABonDriver_PX_W3PE_S.dll/BonDriver_PX_W3PE_T.dll/Interface_W3PE.dll/CardReaderPX.dll‚ðƒŠƒo[ƒXƒGƒ“ƒWƒjƒAƒŠƒ“ƒO‚³‚¹‚Ä‚¢‚½‚¾‚«‚Ü‚µ‚½B
 Eã‹L‚·‚×‚Ä‚ÌìŽÒ—lA‚»‚Ì‘¼ŽQl‚É‚³‚¹‚Ä‚¢‚½‚¾‚¢‚½DTVŠÖŒW‚ÌìŽÒ—lA‚²•Œ¾‚¢‚½‚¾‚¢‚½•ûA•s‹ï‡•ñEŽg—pƒŒƒ|[ƒg‚ð‚¢‚½‚¾‚¢‚½•ûA‘S‚Ä‚ÌŽg—p‚µ‚Ä‚¢‚½‚¾‚¢‚½•ûX‚É[‚­Š´ŽÓ‚¢‚½‚µ‚Ü‚·B
 

@@ -41,6 +41,9 @@
     <ClInclude Include="..\..\aes\Rijndael.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="AsicenPropset.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\doc\BonDriver_PlexPX_S.ini">
