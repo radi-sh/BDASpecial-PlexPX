@@ -385,7 +385,7 @@ const HRESULT CPlexPXSpecials::SetLNBPower(bool bActive)
 	return E_NOINTERFACE;
 }
 
-const HRESULT CPlexPXSpecials::ReadIniFile(WCHAR *szIniFilePath)
+const HRESULT CPlexPXSpecials::ReadIniFile(const WCHAR *szIniFilePath)
 {
 	return S_OK;
 }
