@@ -17,11 +17,9 @@
 
 #pragma comment(lib, "aes.lib")
 
-using namespace std;
-
 struct TunerAndCaptureGuid {
-	const wstring Tuner;
-	const wstring Capture;
+	const std::wstring Tuner;
+	const std::wstring Capture;
 };
 
 static const TunerAndCaptureGuid KNOWN_GUIDS_S[] = {
@@ -167,7 +165,7 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 	BOOL bUseKnownGUID = ::GetPrivateProfileIntW(L"PLEXPX", L"UseKnownGUID", 0, szIniFilePath);
 	BOOL bISDBT = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-T", 0, szIniFilePath);
 	BOOL bISDBS = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-S", 0, szIniFilePath);
-	wstring displayName = szDisplayName;
+	std::wstring displayName = szDisplayName;
 
 	// DisplayNameがGUID一覧と一致しているか比較
 	if (bUseKnownGUID) {
@@ -179,7 +177,7 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 		else if (bISDBS && !bISDBT) {
 			BOOL found = FALSE;
 			for (int i = 0; i < sizeof KNOWN_GUIDS_S / sizeof KNOWN_GUIDS_S[0]; i++) {
-				if (displayName.find(KNOWN_GUIDS_S[i].Tuner) != wstring::npos) {
+				if (displayName.find(KNOWN_GUIDS_S[i].Tuner) != std::wstring::npos) {
 					// 見つかった
 					found = TRUE;
 					break;
@@ -194,7 +192,7 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 		else if (bISDBT && !bISDBS) {
 			BOOL found = FALSE;
 			for (int i = 0; i < sizeof KNOWN_GUIDS_T / sizeof KNOWN_GUIDS_T[0]; i++) {
-				if (displayName.find(KNOWN_GUIDS_T[i].Tuner) != wstring::npos) {
+				if (displayName.find(KNOWN_GUIDS_T[i].Tuner) != std::wstring::npos) {
 					// 見つかった
 					found = TRUE;
 					break;
@@ -209,7 +207,7 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 		else {
 			BOOL found = FALSE;
 			for (int i = 0; i < sizeof KNOWN_GUIDS_3 / sizeof KNOWN_GUIDS_3[0]; i++) {
-				if (displayName.find(KNOWN_GUIDS_3[i].Tuner) != wstring::npos) {
+				if (displayName.find(KNOWN_GUIDS_3[i].Tuner) != std::wstring::npos) {
 					// 見つかった
 					found = TRUE;
 					break;
@@ -278,27 +276,27 @@ __declspec(dllexport) HRESULT CheckCapture(const WCHAR *szTunerDisplayName, cons
 		return S_OK;
 	}
 
-	wstring tunerDisplayName = szTunerDisplayName;
-	wstring captureDisplayName = szCaptureDisplayName;
+	std::wstring tunerDisplayName = szTunerDisplayName;
+	std::wstring captureDisplayName = szCaptureDisplayName;
 
 	// チューナーデバイスとキャプチャーデバイスの組合せが正しいか確認
 	if (bISDBS && !bISDBT) {
 		for (int i = 0; i < sizeof KNOWN_GUIDS_S / sizeof KNOWN_GUIDS_S[0]; i++) {
-			if (tunerDisplayName.find(KNOWN_GUIDS_S[i].Tuner) != wstring::npos && captureDisplayName.find(KNOWN_GUIDS_S[i].Capture) != wstring::npos) {
+			if (tunerDisplayName.find(KNOWN_GUIDS_S[i].Tuner) != std::wstring::npos && captureDisplayName.find(KNOWN_GUIDS_S[i].Capture) != std::wstring::npos) {
 				return S_OK;
 			}
 		}
 	}
 	else if (bISDBT && !bISDBS) {
 		for (int i = 0; i < sizeof KNOWN_GUIDS_T / sizeof KNOWN_GUIDS_T[0]; i++) {
-			if (tunerDisplayName.find(KNOWN_GUIDS_T[i].Tuner) != wstring::npos && captureDisplayName.find(KNOWN_GUIDS_T[i].Capture) != wstring::npos) {
+			if (tunerDisplayName.find(KNOWN_GUIDS_T[i].Tuner) != std::wstring::npos && captureDisplayName.find(KNOWN_GUIDS_T[i].Capture) != std::wstring::npos) {
 				return S_OK;
 			}
 		}
 	}
 	else {
 		for (int i = 0; i < sizeof KNOWN_GUIDS_3 / sizeof KNOWN_GUIDS_3[0]; i++) {
-			if (tunerDisplayName.find(KNOWN_GUIDS_3[i].Tuner) != wstring::npos && captureDisplayName.find(KNOWN_GUIDS_3[i].Capture) != wstring::npos) {
+			if (tunerDisplayName.find(KNOWN_GUIDS_3[i].Tuner) != std::wstring::npos && captureDisplayName.find(KNOWN_GUIDS_3[i].Capture) != std::wstring::npos) {
 				return S_OK;
 			}
 		}
