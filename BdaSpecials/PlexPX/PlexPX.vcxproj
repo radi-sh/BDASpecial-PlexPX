@@ -234,10 +234,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\CIniFileAccess.cpp" />
+    <ClCompile Include="..\..\common\common.cpp" />
     <ClCompile Include="PlexPX.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\aes\Rijndael.h" />
+    <ClInclude Include="..\..\common\CIniFileAccess.h" />
     <ClInclude Include="..\..\common\common.h" />
     <ClInclude Include="..\..\common\IBdaSpecials.h" />
     <ClInclude Include="..\..\common\IBdaSpecials2.h" />

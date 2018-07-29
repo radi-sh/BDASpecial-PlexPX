@@ -1,17 +1,15 @@
-#include <Windows.h>
-#include <stdio.h>
-
-#include <string>
-
-#include "PlexPX.h"
-#include "Rijndael.h"
-
-#include <iostream>
-#include <dshow.h>
-
 #include "common.h"
 
+#include "PlexPX.h"
+
+#include <Windows.h>
+#include <string>
+
+#include <dshow.h>
+
+#include "Rijndael.h"
 #include "AsicenPropset.h"
+#include "CIniFileAccess.h"
 
 #pragma comment(lib, "Strmiids.lib" )
 
@@ -152,19 +150,19 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 {
 	HRESULT hr;
 
+	CIniFileAccess IniFileAccess(szIniFilePath);
+	IniFileAccess.SetSectionName(L"PLEXPX");
+
 	// DebugLogを記録するかどうか
-	if (::GetPrivateProfileIntW(L"PLEXPX", L"DebugLog", 0, szIniFilePath)) {
-		// INIファイルのファイル名取得
-		WCHAR szDebugLogPath[_MAX_PATH + 1];
-		::GetModuleFileNameW(hMySelf, szDebugLogPath, _MAX_PATH + 1);
-		::wcscpy_s(szDebugLogPath + ::wcslen(szDebugLogPath) - 3, 4, L"log");
-		SetDebugLog(szDebugLogPath);
+	if (IniFileAccess.ReadKeyI(L"DebugLog", 0)) {
+		// DebugLogのファイル名取得
+		SetDebugLog(common::GetModuleName(hMySelf) + L"log");
 	}
 
-	BOOL bM2_Dec = ::GetPrivateProfileIntW(L"PLEXPX", L"M2_Dec", 0, szIniFilePath);
-	BOOL bUseKnownGUID = ::GetPrivateProfileIntW(L"PLEXPX", L"UseKnownGUID", 0, szIniFilePath);
-	BOOL bISDBT = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-T", 0, szIniFilePath);
-	BOOL bISDBS = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-S", 0, szIniFilePath);
+	BOOL bM2_Dec = IniFileAccess.ReadKeyI(L"M2_Dec", 0);
+	BOOL bUseKnownGUID = IniFileAccess.ReadKeyI(L"UseKnownGUID", 0);
+	BOOL bISDBT = IniFileAccess.ReadKeyI(L"ISDB-T", 0);
+	BOOL bISDBS = IniFileAccess.ReadKeyI(L"ISDB-S", 0);
 	std::wstring displayName = szDisplayName;
 
 	// DisplayNameがGUID一覧と一致しているか比較
@@ -268,9 +266,12 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 __declspec(dllexport) HRESULT CheckCapture(const WCHAR *szTunerDisplayName, const WCHAR *szTunerFriendlyName,
 	const WCHAR *szCaptureDisplayName, const WCHAR *szCaptureFriendlyName, const WCHAR *szIniFilePath)
 {
-	BOOL bUseKnownGUID = ::GetPrivateProfileIntW(L"PLEXPX", L"UseKnownGUID", 0, szIniFilePath);
-	BOOL bISDBT = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-T", 0, szIniFilePath);
-	BOOL bISDBS = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-S", 0, szIniFilePath);
+	CIniFileAccess IniFileAccess(szIniFilePath);
+	IniFileAccess.SetSectionName(L"PLEXPX");
+
+	BOOL bUseKnownGUID = IniFileAccess.ReadKeyI(L"UseKnownGUID", 0);
+	BOOL bISDBT = IniFileAccess.ReadKeyI(L"ISDB-T", 0);
+	BOOL bISDBS = IniFileAccess.ReadKeyI(L"ISDB-S", 0);
 
 	if (!bUseKnownGUID) {
 		return S_OK;
