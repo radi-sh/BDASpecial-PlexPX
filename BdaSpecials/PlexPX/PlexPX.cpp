@@ -154,15 +154,15 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 	IniFileAccess.SetSectionName(L"PLEXPX");
 
 	// DebugLog‚ð‹L˜^‚·‚é‚©‚Ç‚¤‚©
-	if (IniFileAccess.ReadKeyI(L"DebugLog", 0)) {
+	if (IniFileAccess.ReadKeyB(L"DebugLog", 0)) {
 		// DebugLog‚Ìƒtƒ@ƒCƒ‹–¼Žæ“¾
 		SetDebugLog(common::GetModuleName(hMySelf) + L"log");
 	}
 
-	BOOL bM2_Dec = IniFileAccess.ReadKeyI(L"M2_Dec", 0);
-	BOOL bUseKnownGUID = IniFileAccess.ReadKeyI(L"UseKnownGUID", 0);
-	BOOL bISDBT = IniFileAccess.ReadKeyI(L"ISDB-T", 0);
-	BOOL bISDBS = IniFileAccess.ReadKeyI(L"ISDB-S", 0);
+	BOOL bM2_Dec = IniFileAccess.ReadKeyB(L"M2_Dec", 0);
+	BOOL bUseKnownGUID = IniFileAccess.ReadKeyB(L"UseKnownGUID", 0);
+	BOOL bISDBT = IniFileAccess.ReadKeyB(L"ISDB-T", 0);
+	BOOL bISDBS = IniFileAccess.ReadKeyB(L"ISDB-S", 0);
 	std::wstring displayName = szDisplayName;
 
 	// DisplayName‚ªGUIDˆê——‚Æˆê’v‚µ‚Ä‚¢‚é‚©”äŠr
@@ -269,9 +269,9 @@ __declspec(dllexport) HRESULT CheckCapture(const WCHAR *szTunerDisplayName, cons
 	CIniFileAccess IniFileAccess(szIniFilePath);
 	IniFileAccess.SetSectionName(L"PLEXPX");
 
-	BOOL bUseKnownGUID = IniFileAccess.ReadKeyI(L"UseKnownGUID", 0);
-	BOOL bISDBT = IniFileAccess.ReadKeyI(L"ISDB-T", 0);
-	BOOL bISDBS = IniFileAccess.ReadKeyI(L"ISDB-S", 0);
+	BOOL bUseKnownGUID = IniFileAccess.ReadKeyB(L"UseKnownGUID", 0);
+	BOOL bISDBT = IniFileAccess.ReadKeyB(L"ISDB-T", 0);
+	BOOL bISDBS = IniFileAccess.ReadKeyB(L"ISDB-S", 0);
 
 	if (!bUseKnownGUID) {
 		return S_OK;
