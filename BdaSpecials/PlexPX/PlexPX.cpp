@@ -1,27 +1,23 @@
-#include <Windows.h>
-#include <stdio.h>
-
-#include <string>
-
-#include "PlexPX.h"
-#include "Rijndael.h"
-
-#include <iostream>
-#include <dshow.h>
-
 #include "common.h"
 
+#include "PlexPX.h"
+
+#include <Windows.h>
+#include <string>
+
+#include <dshow.h>
+
+#include "Rijndael.h"
 #include "AsicenPropset.h"
+#include "CIniFileAccess.h"
 
 #pragma comment(lib, "Strmiids.lib" )
 
 #pragma comment(lib, "aes.lib")
 
-using namespace std;
-
 struct TunerAndCaptureGuid {
-	const wstring Tuner;
-	const wstring Capture;
+	const std::wstring Tuner;
+	const std::wstring Capture;
 };
 
 static const TunerAndCaptureGuid KNOWN_GUIDS_S[] = {
@@ -154,20 +150,20 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 {
 	HRESULT hr;
 
+	CIniFileAccess IniFileAccess(szIniFilePath);
+	IniFileAccess.SetSectionName(L"PLEXPX");
+
 	// DebugLogを記録するかどうか
-	if (::GetPrivateProfileIntW(L"PLEXPX", L"DebugLog", 0, szIniFilePath)) {
-		// INIファイルのファイル名取得
-		WCHAR szDebugLogPath[_MAX_PATH + 1];
-		::GetModuleFileNameW(hMySelf, szDebugLogPath, _MAX_PATH + 1);
-		::wcscpy_s(szDebugLogPath + ::wcslen(szDebugLogPath) - 3, 4, L"log");
-		SetDebugLog(szDebugLogPath);
+	if (IniFileAccess.ReadKeyB(L"DebugLog", 0)) {
+		// DebugLogのファイル名取得
+		SetDebugLog(common::GetModuleName(hMySelf) + L"log");
 	}
 
-	BOOL bM2_Dec = ::GetPrivateProfileIntW(L"PLEXPX", L"M2_Dec", 0, szIniFilePath);
-	BOOL bUseKnownGUID = ::GetPrivateProfileIntW(L"PLEXPX", L"UseKnownGUID", 0, szIniFilePath);
-	BOOL bISDBT = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-T", 0, szIniFilePath);
-	BOOL bISDBS = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-S", 0, szIniFilePath);
-	wstring displayName = szDisplayName;
+	BOOL bM2_Dec = IniFileAccess.ReadKeyB(L"M2_Dec", 0);
+	BOOL bUseKnownGUID = IniFileAccess.ReadKeyB(L"UseKnownGUID", 0);
+	BOOL bISDBT = IniFileAccess.ReadKeyB(L"ISDB-T", 0);
+	BOOL bISDBS = IniFileAccess.ReadKeyB(L"ISDB-S", 0);
+	std::wstring displayName = szDisplayName;
 
 	// DisplayNameがGUID一覧と一致しているか比較
 	if (bUseKnownGUID) {
@@ -179,7 +175,7 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 		else if (bISDBS && !bISDBT) {
 			BOOL found = FALSE;
 			for (int i = 0; i < sizeof KNOWN_GUIDS_S / sizeof KNOWN_GUIDS_S[0]; i++) {
-				if (displayName.find(KNOWN_GUIDS_S[i].Tuner) != wstring::npos) {
+				if (displayName.find(KNOWN_GUIDS_S[i].Tuner) != std::wstring::npos) {
 					// 見つかった
 					found = TRUE;
 					break;
@@ -194,7 +190,7 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 		else if (bISDBT && !bISDBS) {
 			BOOL found = FALSE;
 			for (int i = 0; i < sizeof KNOWN_GUIDS_T / sizeof KNOWN_GUIDS_T[0]; i++) {
-				if (displayName.find(KNOWN_GUIDS_T[i].Tuner) != wstring::npos) {
+				if (displayName.find(KNOWN_GUIDS_T[i].Tuner) != std::wstring::npos) {
 					// 見つかった
 					found = TRUE;
 					break;
@@ -209,7 +205,7 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 		else {
 			BOOL found = FALSE;
 			for (int i = 0; i < sizeof KNOWN_GUIDS_3 / sizeof KNOWN_GUIDS_3[0]; i++) {
-				if (displayName.find(KNOWN_GUIDS_3[i].Tuner) != wstring::npos) {
+				if (displayName.find(KNOWN_GUIDS_3[i].Tuner) != std::wstring::npos) {
 					// 見つかった
 					found = TRUE;
 					break;
@@ -270,35 +266,38 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 __declspec(dllexport) HRESULT CheckCapture(const WCHAR *szTunerDisplayName, const WCHAR *szTunerFriendlyName,
 	const WCHAR *szCaptureDisplayName, const WCHAR *szCaptureFriendlyName, const WCHAR *szIniFilePath)
 {
-	BOOL bUseKnownGUID = ::GetPrivateProfileIntW(L"PLEXPX", L"UseKnownGUID", 0, szIniFilePath);
-	BOOL bISDBT = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-T", 0, szIniFilePath);
-	BOOL bISDBS = ::GetPrivateProfileIntW(L"PLEXPX", L"ISDB-S", 0, szIniFilePath);
+	CIniFileAccess IniFileAccess(szIniFilePath);
+	IniFileAccess.SetSectionName(L"PLEXPX");
+
+	BOOL bUseKnownGUID = IniFileAccess.ReadKeyB(L"UseKnownGUID", 0);
+	BOOL bISDBT = IniFileAccess.ReadKeyB(L"ISDB-T", 0);
+	BOOL bISDBS = IniFileAccess.ReadKeyB(L"ISDB-S", 0);
 
 	if (!bUseKnownGUID) {
 		return S_OK;
 	}
 
-	wstring tunerDisplayName = szTunerDisplayName;
-	wstring captureDisplayName = szCaptureDisplayName;
+	std::wstring tunerDisplayName = szTunerDisplayName;
+	std::wstring captureDisplayName = szCaptureDisplayName;
 
 	// チューナーデバイスとキャプチャーデバイスの組合せが正しいか確認
 	if (bISDBS && !bISDBT) {
 		for (int i = 0; i < sizeof KNOWN_GUIDS_S / sizeof KNOWN_GUIDS_S[0]; i++) {
-			if (tunerDisplayName.find(KNOWN_GUIDS_S[i].Tuner) != wstring::npos && captureDisplayName.find(KNOWN_GUIDS_S[i].Capture) != wstring::npos) {
+			if (tunerDisplayName.find(KNOWN_GUIDS_S[i].Tuner) != std::wstring::npos && captureDisplayName.find(KNOWN_GUIDS_S[i].Capture) != std::wstring::npos) {
 				return S_OK;
 			}
 		}
 	}
 	else if (bISDBT && !bISDBS) {
 		for (int i = 0; i < sizeof KNOWN_GUIDS_T / sizeof KNOWN_GUIDS_T[0]; i++) {
-			if (tunerDisplayName.find(KNOWN_GUIDS_T[i].Tuner) != wstring::npos && captureDisplayName.find(KNOWN_GUIDS_T[i].Capture) != wstring::npos) {
+			if (tunerDisplayName.find(KNOWN_GUIDS_T[i].Tuner) != std::wstring::npos && captureDisplayName.find(KNOWN_GUIDS_T[i].Capture) != std::wstring::npos) {
 				return S_OK;
 			}
 		}
 	}
 	else {
 		for (int i = 0; i < sizeof KNOWN_GUIDS_3 / sizeof KNOWN_GUIDS_3[0]; i++) {
-			if (tunerDisplayName.find(KNOWN_GUIDS_3[i].Tuner) != wstring::npos && captureDisplayName.find(KNOWN_GUIDS_3[i].Capture) != wstring::npos) {
+			if (tunerDisplayName.find(KNOWN_GUIDS_3[i].Tuner) != std::wstring::npos && captureDisplayName.find(KNOWN_GUIDS_3[i].Capture) != std::wstring::npos) {
 				return S_OK;
 			}
 		}
@@ -387,7 +386,7 @@ const HRESULT CPlexPXSpecials::SetLNBPower(bool bActive)
 	return E_NOINTERFACE;
 }
 
-const HRESULT CPlexPXSpecials::ReadIniFile(WCHAR *szIniFilePath)
+const HRESULT CPlexPXSpecials::ReadIniFile(const WCHAR *szIniFilePath)
 {
 	return S_OK;
 }

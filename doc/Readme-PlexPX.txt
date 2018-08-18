@@ -23,6 +23,7 @@ Plex社製の下記のチューナーに対応しています（たぶん）。
 1. BonDriver_BDAの入手
 下記URLより、最新バージョンのBonDriver_BDAを入手してください。
 https://github.com/radi-sh/BonDriver_BDA/releases
+※ BonDriver_BDA改-20180818より前のバージョンでは動作しませんのでご注意ください。
 
 2. x86/x64と通常版/ランタイム内蔵版の選択
 BonDriver_BDA付属のReadme-BonDriver_BDAを参考に、BonDriver_BDAと同じものを選択してください。
