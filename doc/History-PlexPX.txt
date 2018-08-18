@@ -39,3 +39,9 @@
 【2018-07-16】
 ・プラットフォームツールセットをVisual Studio 2017 - Windows XPに変更
 ・BonDriver_BDAの最新版に合わせた変更
+
+【2018-08-18】
+・BonDriver_BDAのiniファイルの記述方法変更に対応して付属のiniファイルを変更
+　従来のiniファイル書式のままでも認識可能です
+・BonDriver_PlexPX_S3U.iniに、DefaultNetwork="Dual"の設定を反映
+※ BonDriver_BDA改-20180818より前のバージョンでは動作しませんのでご注意ください。
