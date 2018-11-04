@@ -32,7 +32,7 @@ public:
 private:
 	HMODULE m_hMySelf;
 	CComPtr<IBaseFilter> m_pTunerDevice;
-	IKsPropertySet *m_pIKsPropertySet;
+	CComQIPtr<IKsPropertySet> m_pIKsPropertySet;
 	DWORD m_dwFlag;
 	CRITICAL_SECTION m_CriticalSection;
 };

@@ -218,17 +218,14 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 		}
 	}
 
-	CComPtr<IKsPropertySet> pIKsPropertySet;
-
-	hr = pTunerDevice->QueryInterface(IID_IKsPropertySet, (LPVOID*)&pIKsPropertySet);
-	if (FAILED(hr)) {
-		return hr;
+	CComQIPtr<IKsPropertySet> pIKsPropertySet(pTunerDevice);
+	if (!pIKsPropertySet) {
+		return E_FAIL;
 	}
 
 	// FlagŽæ“¾
 	DWORD dwFlag;
-	hr = asicen_GetFlags(pIKsPropertySet, &dwFlag);
-	if (FAILED(hr)) {
+	if (FAILED(hr = asicen_GetFlags(pIKsPropertySet, &dwFlag))) {
 		return hr;
 	}
 
@@ -310,14 +307,12 @@ __declspec(dllexport) HRESULT CheckCapture(const WCHAR *szTunerDisplayName, cons
 CPlexPXSpecials::CPlexPXSpecials(HMODULE hMySelf, CComPtr<IBaseFilter> pTunerDevice)
 	: m_hMySelf(hMySelf),
 	  m_pTunerDevice(pTunerDevice),
-	  m_pIKsPropertySet(NULL),
+	  m_pIKsPropertySet(m_pTunerDevice),
 	  m_dwFlag(0)
 {
 	::InitializeCriticalSection(&m_CriticalSection);
 
 	HRESULT hr;
-
-	hr = m_pTunerDevice->QueryInterface(IID_IKsPropertySet, (LPVOID*)&m_pIKsPropertySet);
 
 	::EnterCriticalSection(&m_CriticalSection);
 	hr = asicen_GetFlags(m_pIKsPropertySet, &m_dwFlag);
@@ -329,13 +324,6 @@ CPlexPXSpecials::CPlexPXSpecials(HMODULE hMySelf, CComPtr<IBaseFilter> pTunerDev
 CPlexPXSpecials::~CPlexPXSpecials()
 {
 	m_hMySelf = NULL;
-
-	SAFE_RELEASE(m_pIKsPropertySet);
-
-	if (m_pTunerDevice) {
-		m_pTunerDevice.Release();
-		m_pTunerDevice = NULL; 
-	}
 
 	::DeleteCriticalSection(&m_CriticalSection);
 
