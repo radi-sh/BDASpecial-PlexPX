@@ -16,11 +16,11 @@
 #pragma comment(lib, "aes.lib")
 
 struct TunerAndCaptureGuid {
-	const std::wstring Tuner;
-	const std::wstring Capture;
+	const WCHAR * const Tuner;
+	const WCHAR * const Capture;
 };
 
-static const TunerAndCaptureGuid KNOWN_GUIDS_S[] = {
+static constexpr TunerAndCaptureGuid KNOWN_GUIDS_S[] = {
 	// BS/CS110用TunerとCaptureのGUID組合せ
 	// PX-Q3PE		Tuner 0/1/4/5がそれぞれ1個	計4個
 	// PX-W3PE V2	Tuner 0/4がそれぞれ1個		計2個
@@ -44,7 +44,7 @@ static const TunerAndCaptureGuid KNOWN_GUIDS_S[] = {
 	{ L"{ef4af615-7acd-45d2-b7b4-ded5c22a382e}", L"{d572e115-62c7-49ff-956c-84369aada823}", },		// PX-W3U3 V2 Tuner 2
 };
 
-static const TunerAndCaptureGuid KNOWN_GUIDS_T[] = {
+static constexpr TunerAndCaptureGuid KNOWN_GUIDS_T[] = {
 	// UHF/CATV用TunerとCaptureのGUID組合せ
 	// PX-Q3PE		Tuner 2/3/6/7がそれぞれ1個	計4個
 	// PX-W3PE V2	Tuner 2/6がそれぞれ1個		計2個
@@ -68,7 +68,7 @@ static const TunerAndCaptureGuid KNOWN_GUIDS_T[] = {
 	{ L"{6430d7ee-7dc7-4978-9481-d9657cbd583f}", L"{974860c1-a2a9-48e8-82d2-5e8c64a39878}", },		// PX-W3U3 V2 Tuner 3
 };
 
-static const TunerAndCaptureGuid KNOWN_GUIDS_3[] = {
+static constexpr TunerAndCaptureGuid KNOWN_GUIDS_3[] = {
 	// UHF/CATV/BS/CS110用TunerとCaptureのGUID組合せ
 	// PX-S3U		Tuner 0が1個				計1個
 	{ L"{58d97867-8a41-4f07-97e3-f2819af81a92}", L"{7e65574d-e061-4129-8998-51881804e4a4}", },		// PX-S3U Tuner 0
@@ -79,20 +79,20 @@ FILE *g_fpLog = NULL;
 
 HMODULE hMySelf;
 
-static const BYTE SeedInit[32] = {
+static constexpr BYTE SeedInit[32] = {
 	0x61, 0xd8, 0x56, 0x3d, 0xc1, 0x15, 0x46, 0x68, 0xb2, 0xec, 0x6f, 0xa9, 0xed, 0x45, 0x33, 0x81,
 	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10,
 };
 
-static const BYTE SeedM2Dec[16] = {
+static constexpr BYTE SeedM2Dec[16] = {
 	0xaa, 0xcb, 0x1e, 0x40, 0x5f, 0x43, 0x42, 0x50, 0x84, 0xfe, 0xa1, 0x1b, 0xc4, 0xb2, 0xb9, 0x1f,
 };
 
-static const BYTE SeedDecode[16] = {
+static constexpr BYTE SeedDecode[16] = {
 	0x3c, 0x51, 0x93, 0x13, 0x9b, 0xa2, 0x41, 0xc9, 0xb3, 0xfe, 0xb5, 0xda, 0xfe, 0xa0, 0x05, 0xe2,
 };
 
-static const BYTE DecodeTable[32] = {
+static constexpr BYTE DecodeTable[32] = {
 	0x40, 0x5b, 0x99, 0xcc, 0x69, 0x54, 0x42, 0xd6, 0xad, 0x0a, 0x95, 0x27, 0x46, 0x92, 0x6b, 0x73,
 	0x1c, 0x1a, 0x39, 0xfb, 0x21, 0xd7, 0x4f, 0xe5,	0x8b, 0xec, 0x1f, 0x5f, 0xd3, 0x79, 0x7a, 0x13,
 };

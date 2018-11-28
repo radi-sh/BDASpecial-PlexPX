@@ -5,14 +5,14 @@
 // Broadcast Driver Architecture で定義されている Property set / Method set
 //
 
-static const GUID KSPROPSETID_BdaAutodemodulate = { 0xddf15b12, 0xbd25, 0x11d2,{ 0x9c, 0xa0, 0x0, 0xc0, 0x4f, 0x79, 0x71, 0xe0 } };
+static constexpr GUID KSPROPSETID_BdaAutodemodulate = { 0xddf15b12, 0xbd25, 0x11d2,{ 0x9c, 0xa0, 0x0, 0xc0, 0x4f, 0x79, 0x71, 0xe0 } };
 
 enum KSPROPERTY_BDA_AUTODEMODULATE {
     KSPROPERTY_BDA_AUTODEMODULATE_START = 0,			// get only
     KSPROPERTY_BDA_AUTODEMODULATE_STOP					// get only
 };
 
-static const GUID KSPROPSETID_BdaFrequencyFilter = { 0x71985f47, 0x1ca1, 0x11d3,{ 0x9c, 0xc8, 0x0, 0xc0, 0x4f, 0x79, 0x71, 0xe0 } };
+static constexpr GUID KSPROPSETID_BdaFrequencyFilter = { 0x71985f47, 0x1ca1, 0x11d3,{ 0x9c, 0xc8, 0x0, 0xc0, 0x4f, 0x79, 0x71, 0xe0 } };
 
 enum KSPROPERTY_BDA_FREQUENCY_FILTER {
 	KSPROPERTY_BDA_RF_TUNER_FREQUENCY = 0,				// get/set
@@ -27,7 +27,7 @@ enum KSPROPERTY_BDA_FREQUENCY_FILTER {
 	KSPROPERTY_BDA_RF_TUNER_STANDARD_MODE,				// not supported
 };
 
-static const GUID KSPROPSETID_BdaSignalStats = { 0x1347d106, 0xcf3a, 0x428a,{ 0xa5, 0xcb, 0xac, 0xd, 0x9a, 0x2a, 0x43, 0x38 } };
+static constexpr GUID KSPROPSETID_BdaSignalStats = { 0x1347d106, 0xcf3a, 0x428a,{ 0xa5, 0xcb, 0xac, 0xd, 0x9a, 0x2a, 0x43, 0x38 } };
 
 enum KSPROPERTY_BDA_SIGNAL_STATS {
 	KSPROPERTY_BDA_SIGNAL_STRENGTH = 0,					// get only
@@ -37,7 +37,7 @@ enum KSPROPERTY_BDA_SIGNAL_STATS {
 	KSPROPERTY_BDA_SAMPLE_TIME,							// get only
 };
 
-static const GUID KSMETHODSETID_BdaChangeSync = { 0xfd0a5af3, 0xb41d, 0x11d2,{ 0x9c, 0x95, 0x0, 0xc0, 0x4f, 0x79, 0x71, 0xe0 } };
+static constexpr GUID KSMETHODSETID_BdaChangeSync = { 0xfd0a5af3, 0xb41d, 0x11d2,{ 0x9c, 0x95, 0x0, 0xc0, 0x4f, 0x79, 0x71, 0xe0 } };
 
 enum KSMETHOD_BDA_CHANGE_SYNC {
 	KSMETHOD_BDA_START_CHANGES = 0,
@@ -52,7 +52,7 @@ enum KSMETHOD_BDA_CHANGE_SYNC {
 //
 
 // ASICEN 拡張プロパティセット GUID
-static const GUID KSPROPSETID_AsicenExtension = { 0x9e1781e1, 0x9cb1, 0x4407,{ 0xbb, 0xce, 0x54, 0x26, 0xc8, 0xd0, 0x0a, 0x4b } };
+static constexpr GUID KSPROPSETID_AsicenExtension = { 0x9e1781e1, 0x9cb1, 0x4407,{ 0xbb, 0xce, 0x54, 0x26, 0xc8, 0xd0, 0x0a, 0x4b } };
 
 // ASICEN 拡張プロパティID
 enum KSPROPERTY_ASICEN_EXTENSION {
