@@ -54,7 +54,7 @@
     <RootNamespace>PlexPX</RootNamespace>
     <ProjectName>PlexPX</ProjectName>
     <ProjectGuid>{AAA74DAA-A692-4C03-91E6-21B57109A286}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
