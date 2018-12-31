@@ -364,7 +364,7 @@ const HRESULT CPlexPXSpecials::LockChannel(BYTE bySatellite, BOOL bHorizontal, u
 	return E_NOINTERFACE;
 }
 
-const HRESULT CPlexPXSpecials::LockChannel(const TuningParam *pTuningParm)
+const HRESULT CPlexPXSpecials::LockChannel(const TuningParam *pTuningParam)
 {
 	return E_NOINTERFACE;
 }
@@ -438,7 +438,12 @@ const HRESULT CPlexPXSpecials::GetSignalStrength(float *fVal)
 	return S_OK;
 }
 
-const HRESULT CPlexPXSpecials::PreTuneRequest(const TuningParam *pTuningParm, ITuneRequest *pITuneRequest)
+const HRESULT CPlexPXSpecials::PreLockChannel(const TuningParam *pTuningParam)
+{
+	return S_OK;
+}
+
+const HRESULT CPlexPXSpecials::PreTuneRequest(const TuningParam *pTuningParam, ITuneRequest *pITuneRequest)
 {
 	HRESULT hr;
 
@@ -454,22 +459,22 @@ const HRESULT CPlexPXSpecials::PreTuneRequest(const TuningParam *pTuningParm, IT
 	return S_OK;
 }
 
-const HRESULT CPlexPXSpecials::PostLockChannel(const TuningParam *pTuningParm)
+const HRESULT CPlexPXSpecials::PostLockChannel(const TuningParam *pTuningParam)
 {
 	HRESULT hr = S_OK;
 
-	if (pTuningParm->TSID != 0 && pTuningParm->TSID != -1) {
+	if (pTuningParam->TSID != 0 && pTuningParam->TSID != -1) {
 		::EnterCriticalSection(&m_CriticalSection);
-		hr = asicen_SetTSID(m_pIKsPropertySet, pTuningParm->TSID);
+		hr = asicen_SetTSID(m_pIKsPropertySet, pTuningParam->TSID);
 		::LeaveCriticalSection(&m_CriticalSection);
 		if (FAILED(hr)) {
 			return hr;
 		}
 	}
 
-	if (pTuningParm->SID != 0 && pTuningParm->SID != -1) {
+	if (pTuningParam->SID != 0 && pTuningParam->SID != -1) {
 		::EnterCriticalSection(&m_CriticalSection);
-		hr = asicen_SetSID(m_pIKsPropertySet, (DWORD)pTuningParm->SID);
+		hr = asicen_SetSID(m_pIKsPropertySet, (DWORD)pTuningParam->SID);
 		::LeaveCriticalSection(&m_CriticalSection);
 	}
 
