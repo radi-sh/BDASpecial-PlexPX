@@ -440,22 +440,14 @@ const HRESULT CPlexPXSpecials::GetSignalStrength(float *fVal)
 
 const HRESULT CPlexPXSpecials::PreLockChannel(TuningParam *pTuningParam)
 {
+	// Bandwidthは固定値6を設定しておかないとチューニングに失敗する
+	pTuningParam->Modulation.BandWidth = 6;
+
 	return S_OK;
 }
 
 const HRESULT CPlexPXSpecials::PreTuneRequest(const TuningParam *pTuningParam, ITuneRequest *pITuneRequest)
 {
-	HRESULT hr;
-
-	CComPtr<ILocator> pILocator;
-	if (SUCCEEDED(hr = pITuneRequest->get_Locator(&pILocator))) {
-		CComQIPtr<IDVBTLocator> pIDVBTLocator(pILocator);
-		if (pIDVBTLocator) {
-			// Bandwidthは固定値6を設定しておかないとチューニングに失敗する
-			pIDVBTLocator->put_Bandwidth(6);
-		}
-		hr = pITuneRequest->put_Locator(pILocator);
-	}
 	return S_OK;
 }
 
