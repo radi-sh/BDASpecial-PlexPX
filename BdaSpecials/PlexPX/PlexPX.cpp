@@ -438,7 +438,7 @@ const HRESULT CPlexPXSpecials::GetSignalStrength(float *fVal)
 	return S_OK;
 }
 
-const HRESULT CPlexPXSpecials::PreLockChannel(const TuningParam *pTuningParam)
+const HRESULT CPlexPXSpecials::PreLockChannel(TuningParam *pTuningParam)
 {
 	return S_OK;
 }
@@ -456,6 +456,11 @@ const HRESULT CPlexPXSpecials::PreTuneRequest(const TuningParam *pTuningParam, I
 		}
 		hr = pITuneRequest->put_Locator(pILocator);
 	}
+	return S_OK;
+}
+
+const HRESULT CPlexPXSpecials::PostTuneRequest(const TuningParam * pTuningParam)
+{
 	return S_OK;
 }
 

@@ -2,7 +2,7 @@
 
 #include "IBdaSpecials2.h"
 
-class CPlexPXSpecials : public IBdaSpecials2b0
+class CPlexPXSpecials : public IBdaSpecials2b1
 {
 public:
 	CPlexPXSpecials(HMODULE hMySelf, CComPtr<IBaseFilter> pTunerDevice);
@@ -24,8 +24,9 @@ public:
 	const HRESULT IsDecodingNeeded(BOOL *pbAns);
 	const HRESULT Decode(BYTE *pBuf, DWORD dwSize);
 	const HRESULT GetSignalStrength(float *fVal);
-	const HRESULT PreLockChannel(const TuningParam *pTuningParam);
+	const HRESULT PreLockChannel(TuningParam *pTuningParam);
 	const HRESULT PreTuneRequest(const TuningParam *pTuningParam, ITuneRequest *pITuneRequest);
+	const HRESULT PostTuneRequest(const TuningParam *pTuningParam);
 	const HRESULT PostLockChannel(const TuningParam *pTuningParam);
 
 	virtual void Release(void);
