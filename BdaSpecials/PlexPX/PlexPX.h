@@ -2,7 +2,7 @@
 
 #include "IBdaSpecials2.h"
 
-class CPlexPXSpecials : public IBdaSpecials2b1
+class CPlexPXSpecials : public IBdaSpecials2b2
 {
 public:
 	CPlexPXSpecials(HMODULE hMySelf, CComPtr<IBaseFilter> pTunerDevice);
