@@ -5,7 +5,7 @@ Plex社製PCI-Express/USB接続(Box型)3波チューナー用のBonDriver_BDA用BDASpecialプラ
 BonDriver_BDA.dllと組み合わせて使用します。
 
 【動作環境】
-Windows XP以降 (x86/x64)
+Windows XP/Vista/7/8/8.1/10 (x86/x64)
 
 【対応チューナー】
 Plex社製の下記のチューナーに対応しています（たぶん）。
@@ -17,15 +17,15 @@ Plex社製の下記のチューナーに対応しています（たぶん）。
   PX-W3U2
   PX-S3U2
   PX-S3U
-同じPlex社製のPXシリーズでもドングル型タイプのものはこのBDASpecialプラグインの対象外です。
+同じPlex社製のPXシリーズでもドングル型タイプのもの、ASICEN社製チップ以外が使用されているものはこのBDASpecialプラグインの対象外です。
 
 【使い方】
 1. BonDriver_BDAの入手
 下記URLより、最新バージョンのBonDriver_BDAを入手してください。
 https://github.com/radi-sh/BonDriver_BDA/releases
-※ BonDriver_BDA改-20180818より前のバージョンでは動作しませんのでご注意ください。
+※ BonDriver_BDA改-20190202より前のバージョンでは動作しませんのでご注意ください。
 
-2. x86/x64と通常版/ランタイム内蔵版の選択
+2. 使用するファイル（32ビット用/64ビット用、Windows XP用/Windows Vista以降用、通常版/ランタイム内蔵版）の選択
 BonDriver_BDA付属のReadme-BonDriver_BDAを参考に、BonDriver_BDAと同じものを選択してください。
 
 3. Visual C++ 再頒布可能パッケージのインストール
@@ -67,7 +67,7 @@ https://github.com/radi-sh/BDASpecial-PlexPX/releases
 
 ・不具合報告等
 専用のサポート場所はありません。
-5chの映像制作板の該当スレを探して書込むとそのうち何か反応があるかもしれません。
+5chのDTV板で該当スレを探して書込むとそのうち何か反応があるかもしれません。
 作者は多忙を言い訳にあまりスレを見ていない傾向に有りますがご容赦ください。
 
 【免責事項】
