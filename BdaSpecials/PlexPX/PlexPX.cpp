@@ -11,8 +11,6 @@
 #include "AsicenPropset.h"
 #include "CIniFileAccess.h"
 
-#pragma comment(lib, "Strmiids.lib" )
-
 #pragma comment(lib, "aes.lib")
 
 struct TunerAndCaptureGuid {
