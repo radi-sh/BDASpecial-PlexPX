@@ -346,46 +346,6 @@ const HRESULT CPlexPXSpecials::InitializeHook(void)
 	return S_OK;
 }
 
-const HRESULT CPlexPXSpecials::Set22KHz(bool bActive)
-{
-	return E_NOINTERFACE;
-}
-
-const HRESULT CPlexPXSpecials::Set22KHz(long nTone)
-{
-	return E_NOINTERFACE;
-}
-
-const HRESULT CPlexPXSpecials::FinalizeHook(void)
-{
-	return S_OK;
-}
-
-const HRESULT CPlexPXSpecials::GetSignalState(int *pnStrength, int *pnQuality, int *pnLock)
-{
-	return E_NOINTERFACE;
-}
-
-const HRESULT CPlexPXSpecials::LockChannel(BYTE bySatellite, BOOL bHorizontal, unsigned long ulFrequency, BOOL bDvbS2)
-{
-	return E_NOINTERFACE;
-}
-
-const HRESULT CPlexPXSpecials::LockChannel(const TuningParam *pTuningParam)
-{
-	return E_NOINTERFACE;
-}
-
-const HRESULT CPlexPXSpecials::SetLNBPower(bool bActive)
-{
-	return E_NOINTERFACE;
-}
-
-const HRESULT CPlexPXSpecials::ReadIniFile(const WCHAR *szIniFilePath)
-{
-	return S_OK;
-}
-
 const HRESULT CPlexPXSpecials::IsDecodingNeeded(BOOL *pbAns)
 {
 	if (pbAns)
@@ -450,16 +410,6 @@ const HRESULT CPlexPXSpecials::PreLockChannel(TuningParam *pTuningParam)
 	// Bandwidthは固定値6を設定しておかないとチューニングに失敗する
 	pTuningParam->Modulation.BandWidth = 6;
 
-	return S_OK;
-}
-
-const HRESULT CPlexPXSpecials::PreTuneRequest(const TuningParam *pTuningParam, ITuneRequest *pITuneRequest)
-{
-	return S_OK;
-}
-
-const HRESULT CPlexPXSpecials::PostTuneRequest(const TuningParam * pTuningParam)
-{
 	return S_OK;
 }
 
