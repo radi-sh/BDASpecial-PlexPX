@@ -5,7 +5,7 @@
 class CPlexPXSpecials : public IBdaSpecials2b5
 {
 public:
-	CPlexPXSpecials(HMODULE hMySelf, CComPtr<IBaseFilter> pTunerDevice);
+	CPlexPXSpecials(CComPtr<IBaseFilter> pTunerDevice);
 	virtual ~CPlexPXSpecials(void);
 
 	const HRESULT InitializeHook(void);
@@ -18,8 +18,9 @@ public:
 
 	virtual void Release(void);
 
+	static HMODULE m_hMySelf;
+
 private:
-	HMODULE m_hMySelf;
 	CComPtr<IBaseFilter> m_pTunerDevice;
 	CComQIPtr<IKsPropertySet> m_pIKsPropertySet;
 	DWORD m_dwFlag;

@@ -81,7 +81,7 @@ static constexpr TunerAndCaptureGuid KNOWN_GUIDS_3[] = {
 
 FILE *g_fpLog = NULL;
 
-HMODULE hMySelf;
+HMODULE CPlexPXSpecials::m_hMySelf = NULL;
 
 static constexpr BYTE SeedInit[32] = {
 	0x61, 0xd8, 0x56, 0x3d, 0xc1, 0x15, 0x46, 0x68, 0xb2, 0xec, 0x6f, 0xa9, 0xed, 0x45, 0x33, 0x81,
@@ -137,7 +137,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		::_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 		// モジュールハンドル保存
-		hMySelf = hModule;
+		CPlexPXSpecials::m_hMySelf = hModule;
 		break;
 
 	case DLL_PROCESS_DETACH:
@@ -150,7 +150,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
 __declspec(dllexport) IBdaSpecials * CreateBdaSpecials(CComPtr<IBaseFilter> pTunerDevice)
 {
-	return new CPlexPXSpecials(hMySelf, pTunerDevice);
+	return new CPlexPXSpecials(pTunerDevice);
 }
 
 __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const WCHAR *szDisplayName, const WCHAR *szFriendlyName, const WCHAR *szIniFilePath)
@@ -163,7 +163,7 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 	// DebugLogを記録するかどうか
 	if (IniFileAccess.ReadKeyB(L"DebugLog", FALSE)) {
 		// DebugLogのファイル名取得
-		SetDebugLog(common::GetModuleName(hMySelf) + L"log");
+		SetDebugLog(common::GetModuleName(CPlexPXSpecials::m_hMySelf) + L"log");
 	}
 
 	BOOL bM2_Dec = IniFileAccess.ReadKeyB(L"M2_Dec", FALSE);
@@ -311,9 +311,8 @@ __declspec(dllexport) HRESULT CheckCapture(const WCHAR *szTunerDisplayName, cons
 	return E_FAIL;
 }
 
-CPlexPXSpecials::CPlexPXSpecials(HMODULE hMySelf, CComPtr<IBaseFilter> pTunerDevice)
-	: m_hMySelf(hMySelf),
-	  m_pTunerDevice(pTunerDevice),
+CPlexPXSpecials::CPlexPXSpecials(CComPtr<IBaseFilter> pTunerDevice)
+	: m_pTunerDevice(pTunerDevice),
 	  m_pIKsPropertySet(m_pTunerDevice),
 	  m_dwFlag(0)
 {
@@ -330,8 +329,6 @@ CPlexPXSpecials::CPlexPXSpecials(HMODULE hMySelf, CComPtr<IBaseFilter> pTunerDev
 
 CPlexPXSpecials::~CPlexPXSpecials()
 {
-	m_hMySelf = NULL;
-
 	::DeleteCriticalSection(&m_CriticalSection);
 
 	return;
