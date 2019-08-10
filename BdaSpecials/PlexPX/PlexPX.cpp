@@ -101,13 +101,13 @@ static constexpr BYTE DecodeTable[32] = {
 	0x1c, 0x1a, 0x39, 0xfb, 0x21, 0xd7, 0x4f, 0xe5,	0x8b, 0xec, 0x1f, 0x5f, 0xd3, 0x79, 0x7a, 0x13,
 };
 
-static inline void block_xor(BYTE *ret, const BYTE *val1, const BYTE *val2)
+static inline void block_xor(BYTE* ret, const BYTE* val1, const BYTE* val2)
 {
 	for (int i = 0; i < 16; i++)
 		ret[i] = val1[i] ^ val2[i];
 }
 
-static inline void set_key_encrypt(DWORD *pdwRoundKey, const BYTE *pcbyKey, DWORD dwFlag)
+static inline void set_key_encrypt(DWORD* pdwRoundKey, const BYTE* pcbyKey, DWORD dwFlag)
 {
 	if (dwFlag & 0x80) {
 		fake_set_key_encrypt(pdwRoundKey, pcbyKey);
@@ -117,7 +117,7 @@ static inline void set_key_encrypt(DWORD *pdwRoundKey, const BYTE *pcbyKey, DWOR
 	}
 }
 
-static inline void decrypt_buf(BYTE *pbyBuf, DWORD dwSize, DWORD *pdwRoundKey)
+static inline void decrypt_buf(BYTE* pbyBuf, DWORD dwSize, DWORD* pdwRoundKey)
 {
 	for (int i = 0; i < (int)dwSize; i += 188, pbyBuf += 188) {
 		for (int j = 4; j < 164; j += 32) {
@@ -129,7 +129,7 @@ static inline void decrypt_buf(BYTE *pbyBuf, DWORD dwSize, DWORD *pdwRoundKey)
 	}
 }
 
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID /*lpReserved*/)
 {
 	switch (ul_reason_for_call) {
 	case DLL_PROCESS_ATTACH:
@@ -148,12 +148,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     return TRUE;
 }
 
-__declspec(dllexport) IBdaSpecials * CreateBdaSpecials(CComPtr<IBaseFilter> pTunerDevice)
+__declspec(dllexport) IBdaSpecials* CreateBdaSpecials(CComPtr<IBaseFilter> pTunerDevice)
 {
 	return new CPlexPXSpecials(pTunerDevice);
 }
 
-__declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const WCHAR *szDisplayName, const WCHAR *szFriendlyName, const WCHAR *szIniFilePath)
+__declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter* pTunerDevice, const WCHAR* szDisplayName, const WCHAR* /*szFriendlyName*/, const WCHAR* szIniFilePath)
 {
 	HRESULT hr;
 
@@ -267,8 +267,8 @@ __declspec(dllexport) HRESULT CheckAndInitTuner(IBaseFilter *pTunerDevice, const
 	return S_OK;
 }
 
-__declspec(dllexport) HRESULT CheckCapture(const WCHAR *szTunerDisplayName, const WCHAR *szTunerFriendlyName,
-	const WCHAR *szCaptureDisplayName, const WCHAR *szCaptureFriendlyName, const WCHAR *szIniFilePath)
+__declspec(dllexport) HRESULT CheckCapture(const WCHAR* szTunerDisplayName, const WCHAR* /*szTunerFriendlyName*/,
+	const WCHAR* szCaptureDisplayName, const WCHAR* /*szCaptureFriendlyName*/, const WCHAR* szIniFilePath)
 {
 	CIniFileAccess IniFileAccess(szIniFilePath);
 	IniFileAccess.SetSectionName(L"PLEXPX");
